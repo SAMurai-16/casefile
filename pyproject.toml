@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "casefile"
+version = "0.1.0"
+description = "Multi-agent insurance claims orchestration with typed handoffs, loop guards, budget ceilings, and human gates"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    { name = "Samyak" }
+]
+dependencies = [
+    "langgraph>=0.2.0",
+    "langchain>=0.3.0",
+    "langchain-core>=0.3.0",
+    "pydantic>=2.7.0",
+    "python-dotenv>=1.0.0",
+    "opentelemetry-api>=1.24.0",
+    "opentelemetry-sdk>=1.24.0",
+    "matplotlib>=3.8.0",
+]
+
+[project.optional-dependencies]
+google = [
+    "langchain-google-genai>=2.0.0",
+]
+openai = [
+    "langchain-openai>=0.2.0",
+]
+anthropic = [
+    "langchain-anthropic>=0.2.0",
+]
+all = [
+    "casefile[google,openai,anthropic]",
+]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["casefile*"]
