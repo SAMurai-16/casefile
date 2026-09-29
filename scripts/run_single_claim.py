@@ -157,7 +157,7 @@ def run_claim(claim_id_input: str, auto_approve: bool = True, provider: str = No
     
     print("\n" + "=" * 75)
     print(f"FINAL SETTLEMENT SUMMARY: {canonical_claim_id}")
-    print(f"  Status:             {final_state.get('terminal_status', 'UNKNOWN').upper()}")
+    print(f"  Status:             {(final_state.get('terminal_status') or 'UNKNOWN').upper()}")
     print(f"  Final Payout:       ${final_state.get('final_payout_amount', 0.0) or 0.0:,.2f}")
     if final_state.get("payout_breakdown"):
         print("  Settled Lines:")

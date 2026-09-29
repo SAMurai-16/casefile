@@ -20,7 +20,8 @@ You are the Claims Reviewer Agent.
 Compare the normalized damage extraction with the coverage investigation to reach a final multi-line settlement recommendation.
 
 === EXTRACTION FINDINGS ===
-- Claim ID: {extraction.claim_id}
+- Claim ID: {state["claim_id"]}
+- Current Rework Attempt: {state.get("rework_count", 0)}
 - Incident: {extraction.incident_summary} ({extraction.incident_date} at {extraction.incident_location})
 - Vehicle: {extraction.vehicle_year} {extraction.vehicle_make} {extraction.vehicle_model} (VIN: {extraction.vehicle_vin})
 - Reported Damage Areas: {', '.join(extraction.reported_damage_areas)}
@@ -57,23 +58,7 @@ Adjudication & Settlement Rules:
    - Recommend REWORK.
 """
     structured_llm = LLMFactory.get_structured_llm(ReviewResult)
-    
-    # Check if this run is testing the rework pipeline
-    if "REWORK" in state["claim_id"].upper() and state["rework_count"] == 0:
-        result = ReviewResult(
-            claim_id=state["claim_id"],
-            damage_narrative_alignment=False,
-            discrepancy_details=["Left quarter panel refinish labor missing from estimate breakdown."],
-            repair_cost_vs_limit_check="within_limits",
-            payout_breakdown={},
-            proposed_payout_amount=0.0,
-            recommendation="rework",
-            rework_target="extractor",
-            rework_instructions="Re-extract line items with specific focus on left rear quarter panel paint hours.",
-            justification="Quarter panel scuff in FNOL not accounted for in repair items table."
-        )
-    else:
-        result: ReviewResult = structured_llm.invoke(prompt)
+    result: ReviewResult = structured_llm.invoke(prompt)
 
     # Deterministic Line-Item Arithmetic Audit
     math_discrepancies = []

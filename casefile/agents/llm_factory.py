@@ -398,7 +398,20 @@ class MockStructuredLLM:
                 )
 
         elif self.output_schema == ReviewResult:
-            if "clm-2026-00147" in prompt_lower or "maria" in prompt_lower:
+            if "clm-rework" in prompt_lower and "rework attempt: 0" in prompt_lower:
+                return ReviewResult(
+                    claim_id="CLM-REWORK-001",
+                    damage_narrative_alignment=False,
+                    discrepancy_details=["Left quarter panel refinish labor missing from estimate breakdown."],
+                    repair_cost_vs_limit_check="within_limits",
+                    payout_breakdown={},
+                    proposed_payout_amount=0.0,
+                    recommendation="rework",
+                    rework_target="extractor",
+                    rework_instructions="Re-extract line items with specific focus on left rear quarter panel paint hours.",
+                    justification="Quarter panel scuff in FNOL not accounted for in repair items table."
+                )
+            elif "clm-2026-00147" in prompt_lower or "10001" in prompt_lower or "maria" in prompt_lower:
                 return ReviewResult(
                     claim_id="CLM-2026-00147",
                     damage_narrative_alignment=True,
@@ -413,7 +426,7 @@ class MockStructuredLLM:
                     recommendation="approve",
                     justification="Multi-line claim approved: Repair estimate ($4,017.79) matches rear-end damage described in FNOL; $500 deductible applied. Enterprise rental invoice ($336.00) verified within daily and duration limits. Medical bill ($380.00) fully covered under MedPay."
                 )
-            elif "clm-2026-00203" in prompt_lower or "derek" in prompt_lower:
+            elif "clm-2026-00203" in prompt_lower or "10002" in prompt_lower or "derek" in prompt_lower:
                 return ReviewResult(
                     claim_id="CLM-2026-00203",
                     damage_narrative_alignment=True,
@@ -426,7 +439,7 @@ class MockStructuredLLM:
                     recommendation="partial_approve",
                     justification="Damage is consistent with barrier impact, but estimate ($12,590.70) exceeds collision limit ($10,000). Maximum payout capped at $9,000.00. No rental or medical coverage claimed."
                 )
-            elif "clm-2026-00251" in prompt_lower or "susan" in prompt_lower:
+            elif "clm-2026-00251" in prompt_lower or "10003" in prompt_lower or "susan" in prompt_lower:
                 return ReviewResult(
                     claim_id="CLM-2026-00251",
                     damage_narrative_alignment=True,
@@ -439,7 +452,7 @@ class MockStructuredLLM:
                     recommendation="approve",
                     justification="Low-speed parking lot collision with complete narrative consistency. $1,004.86 repair cost is well within $30,000 limit. Standard $500 deductible applied."
                 )
-            elif "clm-2026-00278" in prompt_lower or "travis" in prompt_lower:
+            elif "clm-2026-00278" in prompt_lower or "10004" in prompt_lower or "travis" in prompt_lower:
                 return ReviewResult(
                     claim_id="CLM-2026-00278",
                     damage_narrative_alignment=True,
