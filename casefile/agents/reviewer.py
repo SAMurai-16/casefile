@@ -85,6 +85,26 @@ def reviewer_node(state: ClaimState) -> dict:
     discrepancy_section = "\n".join(f"  • {d}" for d in math_discrepancies) if math_discrepancies else "  • All invoice line items and totals verified with 100% arithmetic precision."
     payout_section = "\n".join(f"  • {k.replace('_', ' ').title()}: ${v:,.2f}" for k, v in payout_breakdown.items()) if payout_breakdown else "  • No eligible payout ($0.00)"
 
+    # Format itemized shop repair operations for adversarial cross-check
+    if extraction.itemized_repairs:
+        repairs_section = "\n".join(
+            f"  • [{item.category.upper()}] {item.description} ({item.part_type or 'Labor'}) - ${item.amount:,.2f}"
+            for item in extraction.itemized_repairs[:25]
+        )
+    else:
+        raw_lines = (
+            estimate_raw.get("line_items") or 
+            estimate_raw.get("estimate_lines") or 
+            estimate_raw.get("work_items") or 
+            estimate_raw.get("itemized_operations") or 
+            estimate_raw.get("repair_operations") or []
+        )
+        repairs_section = "\n".join(
+            f"  • {item.get('description') or item.get('item_desc') or item.get('service_description') or item.get('operation') or 'Repair operation'}: "
+            f"${float(item.get('part_amt') or item.get('part_price') or item.get('parts_cost') or item.get('line_cost') or item.get('amount') or 0):,.2f}"
+            for item in raw_lines[:25] if isinstance(item, dict)
+        ) if raw_lines else "  • (No itemized breakdown provided in estimate)"
+
     # =========================================================================
     # STEP 3: ADVERSARIAL DAMAGE CROSS-EXAMINATION & SYNTHESIS (LLM)
     # =========================================================================
@@ -102,9 +122,11 @@ Your job is adversarial cross-document examination and synthesizing the executiv
 - Driver-Reported Damage Areas: {', '.join(extraction.reported_damage_areas)}
 - Injuries Reported: {extraction.injuries_summary or 'None'}
 
-=== BODY SHOP REPAIR INVOICE ===
+=== BODY SHOP REPAIR INVOICE & BILLED OPERATIONS ===
 - Facility: {extraction.repair_facility_name}
 - Total Claimed by Shop: ${extraction.claimed_grand_total:,.2f} (Parts: ${extraction.total_parts_cost:,.2f}, Labor: ${extraction.total_labor_cost:,.2f}, Add'l: ${extraction.total_additional_costs:,.2f})
+- Itemized Parts & Labor Operations Billed:
+{repairs_section}
 
 === PRE-COMPUTED ARITHMETIC AUDIT FINDINGS ===
 {discrepancy_section}

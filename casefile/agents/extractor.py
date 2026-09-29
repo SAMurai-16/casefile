@@ -39,7 +39,8 @@ Extraction Instructions:
 - Extract incident date, time, location, and factual description from the narrative.
 - Extract all vehicle identification information.
 - Parse driver-reported damage areas, injury descriptions, and police report numbers from the narrative text.
-- Standardize all repair operations, parts, labor hours, and bottom-line dollar totals from the estimate.
+- Extract every distinct repair operation and part into itemized_repairs (description, category, part_type, amount, labor_hours).
+- Extract totals: total_parts_cost, total_labor_cost, total_additional_costs, and claimed_grand_total from the estimate.
 - If optional rental receipt is provided, extract agency name, dates, days billed, daily rate, and total charged.
 - If optional medical bill is provided, extract provider name, patient name, treatment, and total billed.
 - If optional third-party claim is provided, extract third-party claimant, property damage, and injury amounts.
