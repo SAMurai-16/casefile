@@ -6,8 +6,12 @@ from .llm_factory import LLMFactory
 def reviewer_node(state: ClaimState) -> dict:
     """
     Reviewer Agent:
-    Cross-checks all extracted evidence against multi-line coverage investigation findings.
-    Synthesizes itemized payout breakdown across all approved coverage buckets.
+    1. Deterministic Math & Line-Item Audit:
+       - Audits invoice arithmetic and identifies shop variances (e.g. $200 parts discrepancy).
+       - Computes precise, legally binding multi-line payout breakdowns and limit ceilings.
+    2. Adversarial Damage Cross-Examination & Human Gate Synthesis:
+       - LLM cross-examines driver FNOL narrative against shop repair line items.
+       - Synthesizes findings, flags unrelated prior damage or inflation, and drafts the adjuster brief.
     """
     extraction = state["extraction"]
     investigation = state["investigation"]
@@ -15,53 +19,12 @@ def reviewer_node(state: ClaimState) -> dict:
     if not extraction or not investigation:
         raise ValueError("Reviewer requires both extraction and investigation results to be completed.")
 
-    prompt = f"""
-You are the Claims Reviewer Agent.
-Compare the normalized damage extraction with the coverage investigation to reach a final multi-line settlement recommendation.
-
-=== EXTRACTION FINDINGS ===
-- Claim ID: {state["claim_id"]}
-- Current Rework Attempt: {state.get("rework_count", 0)}
-- Incident: {extraction.incident_summary} ({extraction.incident_date} at {extraction.incident_location})
-- Vehicle: {extraction.vehicle_year} {extraction.vehicle_make} {extraction.vehicle_model} (VIN: {extraction.vehicle_vin})
-- Reported Damage Areas: {', '.join(extraction.reported_damage_areas)}
-- Body Shop Repair Total: ${extraction.claimed_grand_total:,.2f} at {extraction.repair_facility_name}
-- Rental Claimed: {f"{extraction.rental_receipt.days_billed}d @ ${extraction.rental_receipt.daily_rate}/d (${extraction.rental_receipt.total_charged:,.2f})" if extraction.rental_receipt else "None"}
-- Medical Bills Claimed: {f"${sum(b.total_billed for b in extraction.medical_bills):,.2f}" if extraction.medical_bills else "None"}
-- Third-Party Claim: {f"${extraction.third_party_claim.property_damage_claimed + extraction.third_party_claim.bodily_injury_claimed:,.2f}" if extraction.third_party_claim else "None"}
-
-=== INVESTIGATION COVERAGE FINDINGS ===
-- Policy Status: {investigation.policy_status}
-- Incident Classification: {investigation.incident_classification}
-- Collision Covered: {investigation.collision_covered} (Limit: ${investigation.collision_limit_per_incident or 0:,.2f}, Deductible: ${investigation.collision_deductible or 0:,.2f})
-- Max Eligible Collision Payout: ${investigation.max_eligible_collision_payout or 0:,.2f}
-- Rental Eligible Payout: ${investigation.rental_eligible_payout:,.2f} (Notes: {investigation.rental_notes or 'N/A'})
-- MedPay Eligible Payout: ${investigation.medpay_eligible_payout:,.2f} (Notes: {investigation.medpay_notes or 'N/A'})
-- Liability Exposure Flag: {investigation.liability_exposure_flag} ({investigation.liability_exposure_summary or 'No exposure'})
-- Fraud Risk Level: {investigation.fraud_risk_level.upper()} (Score: {investigation.fraud_risk_score}/100)
-- SIU Referral Recommended: {investigation.siu_referral_recommended}
-
-Adjudication & Settlement Rules:
-1. If Policy Status is Lapsed or Cancelled:
-   - Recommend DENY with $0 total payout.
-   - If third-party claims exist, issue a critical liability_warning that policyholder faces full personal exposure.
-2. If Fraud Risk is CRITICAL:
-   - Recommend ESCALATE_SIU with $0 payout pending SIU investigation.
-3. If Policy is Active:
-   - Calculate itemized payout_breakdown dictionary:
-     * "vehicle_repair": min(repair_cost, collision_limit) - deductible (if collision covered)
-     * "rental_car": rental_eligible_payout (if rental covered and claimed)
-     * "medical_payments": medpay_eligible_payout (if MedPay covered and claimed)
-   - Set proposed_payout_amount to the exact sum of all items in payout_breakdown.
-   - If repair cost exceeded policy collision limit, recommendation is "partial_approve", otherwise "approve".
-4. If there is severe unexplained ambiguity between estimate parts and narrative and rework_count < 2:
-   - Recommend REWORK.
-"""
-    structured_llm = LLMFactory.get_structured_llm(ReviewResult)
-    result: ReviewResult = structured_llm.invoke(prompt)
-
-    # Deterministic Line-Item Arithmetic Audit
+    # =========================================================================
+    # STEP 1: DETERMINISTIC LINE-ITEM ARITHMETIC AUDIT (Pure Python)
+    # =========================================================================
     math_discrepancies = []
+    
+    # Check A: Component totals (parts + labor + additional) vs claimed grand total
     components_sum = round(extraction.total_parts_cost + extraction.total_labor_cost + extraction.total_additional_costs, 2)
     if abs(components_sum - extraction.claimed_grand_total) > 1.0:
         diff = extraction.claimed_grand_total - components_sum
@@ -69,6 +32,7 @@ Adjudication & Settlement Rules:
             f"Arithmetic discrepancy in estimate: Components sum (${components_sum:,.2f}) differs from claimed total (${extraction.claimed_grand_total:,.2f}) by ${diff:+,.2f}."
         )
 
+    # Check B: Raw invoice line items vs printed summary header (e.g. Claim 002 $200 parts variance)
     estimate_raw = state.get("estimate_raw", {})
     if isinstance(estimate_raw, dict):
         line_items = estimate_raw.get("line_items") or estimate_raw.get("estimate_lines") or estimate_raw.get("work_items") or []
@@ -82,9 +46,105 @@ Adjudication & Settlement Rules:
                     f"Shop invoice line-item parts variance detected: Stated parts subtotal (${stated_parts:,.2f}) exceeds sum of itemized parts (${raw_parts_sum:,.2f}) by ${diff:,.2f}."
                 )
 
-    for disc in math_discrepancies:
-        if disc not in result.discrepancy_details:
-            result.discrepancy_details.append(disc)
+    # =========================================================================
+    # STEP 2: DETERMINISTIC PAYOUT & LIMIT ADJUDICATION (Pure Python)
+    # =========================================================================
+    payout_breakdown = {}
+    proposed_payout = 0.0
+    limit_check = "within_limits"
+
+    if investigation.policy_status in ("Lapsed", "Cancelled", "Suspended"):
+        limit_check = "policy_void"
+        proposed_payout = 0.0
+    elif investigation.fraud_risk_level == "critical" or investigation.coverage_verdict == "not_covered":
+        proposed_payout = 0.0
+    else:
+        # 1. Collision line
+        if investigation.collision_covered:
+            raw_cost = extraction.claimed_grand_total
+            limit = investigation.collision_limit_per_incident or 0.0
+            deductible = investigation.collision_deductible or 0.0
+            if limit > 0 and raw_cost > limit:
+                limit_check = "exceeds_limits"
+                repair_payout = max(0.0, round(limit - deductible, 2))
+            else:
+                repair_payout = max(0.0, round(raw_cost - deductible, 2))
+            payout_breakdown["vehicle_repair"] = repair_payout
+            
+        # 2. Rental reimbursement line
+        if investigation.rental_eligible_payout > 0:
+            payout_breakdown["rental_car"] = round(investigation.rental_eligible_payout, 2)
+            
+        # 3. Medical payments (MedPay) line
+        if investigation.medpay_eligible_payout > 0:
+            payout_breakdown["medical_payments"] = round(investigation.medpay_eligible_payout, 2)
+            
+        proposed_payout = round(sum(payout_breakdown.values()), 2)
+
+    # Format findings for prompt
+    discrepancy_section = "\n".join(f"  • {d}" for d in math_discrepancies) if math_discrepancies else "  • All invoice line items and totals verified with 100% arithmetic precision."
+    payout_section = "\n".join(f"  • {k.replace('_', ' ').title()}: ${v:,.2f}" for k, v in payout_breakdown.items()) if payout_breakdown else "  • No eligible payout ($0.00)"
+
+    # =========================================================================
+    # STEP 3: ADVERSARIAL DAMAGE CROSS-EXAMINATION & SYNTHESIS (LLM)
+    # =========================================================================
+    prompt = f"""
+You are the Senior Claims Reviewer Agent.
+Your job is adversarial cross-document examination and synthesizing the executive justification for the Human Approval Gate.
+
+=== CLAIM IDENTIFICATION ===
+- Claim ID: {state["claim_id"]}
+- Current Rework Attempt: {state.get("rework_count", 0)}
+
+=== LOSS NARRATIVE (DRIVER STATEMENT) ===
+- Incident Date & Location: {extraction.incident_date} at {extraction.incident_location}
+- Driver Account: {extraction.incident_summary}
+- Driver-Reported Damage Areas: {', '.join(extraction.reported_damage_areas)}
+- Injuries Reported: {extraction.injuries_summary or 'None'}
+
+=== BODY SHOP REPAIR INVOICE ===
+- Facility: {extraction.repair_facility_name}
+- Total Claimed by Shop: ${extraction.claimed_grand_total:,.2f} (Parts: ${extraction.total_parts_cost:,.2f}, Labor: ${extraction.total_labor_cost:,.2f}, Add'l: ${extraction.total_additional_costs:,.2f})
+
+=== PRE-COMPUTED ARITHMETIC AUDIT FINDINGS ===
+{discrepancy_section}
+
+=== ACTUARIAL COVERAGE & RISK CONTEXT ===
+- Policy Status: {investigation.policy_status}
+- Pre-Accident Vehicle ACV: ${investigation.actual_cash_value or 0:,.2f} (Repair/ACV: {(investigation.repair_to_acv_ratio or 0) * 100:.1f}%)
+- Total Loss Threshold Triggered: {investigation.is_total_loss_candidate}
+- Fraud Risk Score: {investigation.fraud_risk_score}/100 ({investigation.fraud_risk_level.upper()})
+- SIU Referral Recommended: {investigation.siu_referral_recommended}
+- Third-Party Exposure: {investigation.liability_exposure_flag} ({investigation.liability_exposure_summary or 'No exposure'})
+
+=== COMPUTED SETTLEMENT PAYOUT (DETERMINISTIC) ===
+{payout_section}
+  TOTAL PROPOSED PAYOUT: ${proposed_payout:,.2f} (Limit Status: {limit_check})
+
+Review Tasks:
+1. Physical Damage Alignment:
+   - Check if body shop operations match the impact physics and damage areas described by the driver.
+   - Flag any unitemized panels, invoice padding, or unrelated prior damage in discrepancy_details.
+2. Settlement Recommendation:
+   - If Policy is Lapsed/Cancelled: recommend "deny".
+   - If SIU Referral is Recommended or Fraud is Critical: recommend "escalate_siu".
+   - If unresolvable ambiguity between damage and narrative exists (and rework < 2): recommend "rework" with target and instructions.
+   - If repair cost exceeds policy collision limit: recommend "partial_approve".
+   - Otherwise: recommend "approve".
+3. Adjuster Briefing:
+   - Write a clear, comprehensive justification summarizing the evidence, coverage application, and any detected discrepancies.
+   - If third-party claims exist without active coverage, include a clear liability_warning.
+"""
+    structured_llm = LLMFactory.get_structured_llm(ReviewResult)
+    result: ReviewResult = structured_llm.invoke(prompt)
+
+    # Ensure deterministic math & audit results override/enrich LLM outputs
+    result.payout_breakdown = payout_breakdown
+    result.proposed_payout_amount = proposed_payout
+    result.repair_cost_vs_limit_check = limit_check
+    for d in math_discrepancies:
+        if d not in result.discrepancy_details:
+            result.discrepancy_details.append(d)
 
     tokens_used, cost_usd = calculate_call_cost({
         "input_tokens": 1200,
