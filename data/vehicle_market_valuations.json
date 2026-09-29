@@ -1,0 +1,66 @@
+{
+  "comment": "Kelley Blue Book / CCC ONE Market Valuation Benchmark Data for CaseFile Claims",
+  "vehicles": {
+    "honda_civic": {
+      "make": "Honda",
+      "model": "Civic",
+      "model_years": {
+        "2023": { "base_msrp": 26450.00, "fair_market_value_baseline": 24500.00, "depreciation_per_10k_miles": 650.00 },
+        "2022": { "base_msrp": 25550.00, "fair_market_value_baseline": 22000.00, "depreciation_per_10k_miles": 650.00 },
+        "2021": { "base_msrp": 24250.00, "fair_market_value_baseline": 19500.00, "depreciation_per_10k_miles": 600.00 }
+      }
+    },
+    "bmw_330i": {
+      "make": "BMW",
+      "model": "330i",
+      "model_years": {
+        "2023": { "base_msrp": 44300.00, "fair_market_value_baseline": 36000.00, "depreciation_per_10k_miles": 1200.00 },
+        "2022": { "base_msrp": 42300.00, "fair_market_value_baseline": 31000.00, "depreciation_per_10k_miles": 1150.00 },
+        "2021": { "base_msrp": 41250.00, "fair_market_value_baseline": 27000.00, "depreciation_per_10k_miles": 1100.00 }
+      }
+    },
+    "toyota_rav4": {
+      "make": "Toyota",
+      "model": "RAV4",
+      "model_years": {
+        "2024": { "base_msrp": 31500.00, "fair_market_value_baseline": 29500.00, "depreciation_per_10k_miles": 550.00 },
+        "2023": { "base_msrp": 30200.00, "fair_market_value_baseline": 26800.00, "depreciation_per_10k_miles": 550.00 },
+        "2022": { "base_msrp": 28900.00, "fair_market_value_baseline": 24200.00, "depreciation_per_10k_miles": 500.00 }
+      }
+    },
+    "mercedes-benz_c300": {
+      "make": "Mercedes-Benz",
+      "model": "C300",
+      "model_years": {
+        "2022": { "base_msrp": 44600.00, "fair_market_value_baseline": 34000.00, "depreciation_per_10k_miles": 1250.00 },
+        "2021": { "base_msrp": 42600.00, "fair_market_value_baseline": 29500.00, "depreciation_per_10k_miles": 1200.00 },
+        "2020": { "base_msrp": 41400.00, "fair_market_value_baseline": 26800.00, "depreciation_per_10k_miles": 1100.00 }
+      }
+    },
+    "nissan_altima": {
+      "make": "Nissan",
+      "model": "Altima",
+      "model_years": {
+        "2023": { "base_msrp": 25730.00, "fair_market_value_baseline": 21500.00, "depreciation_per_10k_miles": 700.00 },
+        "2022": { "base_msrp": 24900.00, "fair_market_value_baseline": 19500.00, "depreciation_per_10k_miles": 700.00 },
+        "2021": { "base_msrp": 24550.00, "fair_market_value_baseline": 18500.00, "depreciation_per_10k_miles": 650.00 }
+      }
+    },
+    "ford_f-150": {
+      "make": "Ford",
+      "model": "F-150",
+      "model_years": {
+        "2023": { "base_msrp": 38000.00, "fair_market_value_baseline": 34500.00, "depreciation_per_10k_miles": 800.00 },
+        "2022": { "base_msrp": 36000.00, "fair_market_value_baseline": 31500.00, "depreciation_per_10k_miles": 800.00 }
+      }
+    },
+    "chevrolet_equinox": {
+      "make": "Chevrolet",
+      "model": "Equinox",
+      "model_years": {
+        "2024": { "base_msrp": 28000.00, "fair_market_value_baseline": 25000.00, "depreciation_per_10k_miles": 600.00 },
+        "2023": { "base_msrp": 26600.00, "fair_market_value_baseline": 22500.00, "depreciation_per_10k_miles": 600.00 }
+      }
+    }
+  }
+}
