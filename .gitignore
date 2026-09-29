@@ -21,3 +21,6 @@ build/
 # Editor
 .vscode/
 .idea/
+
+# Runtime trace outputs
+traces/*.json
