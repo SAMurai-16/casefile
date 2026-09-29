@@ -1,0 +1,110 @@
+{
+  "document_type": "Policy & Coverage Record",
+  "claim_id": "CLM-2026-10019",
+  "retrieval_timestamp": "2026-09-24T08:42:19Z",
+  "policy": {
+    "policy_number": "ALT-GA-2026-390714",
+    "product_name": "Allstate Value Plan \u00e2\u20ac\u201d Liability + Collision",
+    "status": "Active",
+    "effective_date": "2026-08-01",
+    "expiration_date": "2027-08-01",
+    "premium_monthly": 310.0,
+    "premium_status": "Current \u00e2\u20ac\u201d last payment 2026-09-01",
+    "auto_renewal": false
+  },
+  "policyholder": {
+    "name": "Travis Reginald Bellamy",
+    "date_of_birth": "1988-07-19",
+    "address": "1841 Briarcliff Road NE, Apt 14D, Atlanta, GA 30329",
+    "phone": "(404) 555-0629",
+    "email": "travisbellamy@yahoo.com",
+    "drivers_license": "GA-DL-065482917",
+    "credit_tier": "Non-Standard"
+  },
+  "insured_vehicle": {
+    "year": 2020,
+    "make": "Mercedes-Benz",
+    "model": "C300 4MATIC",
+    "vin": "W1KWF8DB2LR598217",
+    "annual_mileage_estimate": 18000,
+    "garaging_zip": "30329",
+    "lienholder": "Capital One Auto Finance (lien active)"
+  },
+  "coverage": {
+    "collision": {
+      "covered": true,
+      "per_incident_limit": 15000.0,
+      "deductible": 1000.0
+    },
+    "comprehensive": {
+      "covered": false,
+      "per_incident_limit": null,
+      "deductible": null
+    },
+    "property_damage_liability": {
+      "covered": true,
+      "per_incident_limit": 25000.0,
+      "deductible": 0
+    },
+    "bodily_injury_liability": {
+      "covered": true,
+      "per_person_limit": 25000.0,
+      "per_incident_limit": 50000.0
+    },
+    "uninsured_motorist": {
+      "covered": false,
+      "per_incident_limit": null
+    },
+    "medical_payments": {
+      "covered": false,
+      "per_person_limit": null
+    },
+    "rental_reimbursement": {
+      "covered": false,
+      "daily_limit": null,
+      "max_days": null
+    }
+  },
+  "claim_history": {
+    "total_claims_all_time": 5,
+    "claims_last_12_months": 3,
+    "claims_last_24_months": 5,
+    "prior_claims": [
+      {
+        "claim_id": "CLM-2026-00195",
+        "date": "2026-08-30",
+        "type": "Collision \u00e2\u20ac\u201d Hit guardrail on highway ramp",
+        "amount_paid": 4200.0,
+        "fault": "At-fault"
+      },
+      {
+        "claim_id": "CLM-2026-00112",
+        "date": "2026-05-14",
+        "type": "Collision \u00e2\u20ac\u201d Backed into concrete post in parking garage",
+        "amount_paid": 2800.0,
+        "fault": "At-fault"
+      },
+      {
+        "claim_id": "CLM-2026-00044",
+        "date": "2026-01-19",
+        "type": "Collision \u00e2\u20ac\u201d Slid on ice into a parked car",
+        "amount_paid": 6100.0,
+        "fault": "At-fault"
+      },
+      {
+        "claim_id": "CLM-2025-00887",
+        "date": "2025-08-22",
+        "type": "Property Damage Liability \u00e2\u20ac\u201d Side-swiped parked vehicle",
+        "amount_paid": 3500.0,
+        "fault": "At-fault"
+      },
+      {
+        "claim_id": "CLM-2025-00614",
+        "date": "2025-04-10",
+        "type": "Collision \u00e2\u20ac\u201d Rear-ended vehicle in traffic",
+        "amount_paid": 7200.0,
+        "fault": "At-fault"
+      }
+    ]
+  }
+}

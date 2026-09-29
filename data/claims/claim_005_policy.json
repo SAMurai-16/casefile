@@ -1,0 +1,102 @@
+{
+  "document_type": "Policy & Coverage Record",
+  "claim_id": "CLM-2026-10005",
+  "retrieval_timestamp": "2026-09-26T11:30:08Z",
+  "policy": {
+    "policy_number": "GCO-TX-2025-441928",
+    "product_name": "GEICO Basic \u00e2\u20ac\u201d Liability + Collision",
+    "status": "LAPSED \u00e2\u20ac\u201d Cancelled for Non-Payment",
+    "effective_date": "2025-06-01",
+    "expiration_date": "2026-06-01",
+    "cancellation_date": "2026-07-15",
+    "cancellation_reason": "Non-payment of premium. Grace period expired. Two consecutive missed payments (June and July 2026).",
+    "premium_monthly": 198.0,
+    "premium_status": "DELINQUENT \u00e2\u20ac\u201d last payment received 2026-05-28",
+    "auto_renewal": false
+  },
+  "policyholder": {
+    "name": "Angela Denise Washington",
+    "date_of_birth": "1985-01-30",
+    "address": "2219 Live Oak Street, Apt 8, Dallas, TX 75204",
+    "phone": "(214) 555-0583",
+    "email": "angelaw_dallas@gmail.com",
+    "drivers_license": "TX-DL-18740293",
+    "credit_tier": "Substandard"
+  },
+  "insured_vehicle": {
+    "year": 2021,
+    "make": "Nissan",
+    "model": "Altima SR",
+    "vin": "1N4BL4CV5MN347812",
+    "annual_mileage_estimate": 14000,
+    "garaging_zip": "75204",
+    "lienholder": "Santander Consumer USA (lien active)"
+  },
+  "coverage": {
+    "collision": {
+      "covered": false,
+      "per_incident_limit": null,
+      "deductible": null,
+      "note": "Coverage VOID \u00e2\u20ac\u201d policy lapsed as of 2026-07-15. No active coverage at date of loss (2026-09-25)."
+    },
+    "comprehensive": {
+      "covered": false,
+      "per_incident_limit": null,
+      "deductible": null,
+      "note": "Coverage VOID."
+    },
+    "property_damage_liability": {
+      "covered": false,
+      "per_incident_limit": null,
+      "deductible": null,
+      "note": "Coverage VOID."
+    },
+    "bodily_injury_liability": {
+      "covered": false,
+      "per_person_limit": null,
+      "per_incident_limit": null,
+      "note": "Coverage VOID. Claimant is personally liable for other party's medical expenses."
+    },
+    "uninsured_motorist": {
+      "covered": false,
+      "per_incident_limit": null
+    },
+    "medical_payments": {
+      "covered": false,
+      "per_person_limit": null
+    },
+    "rental_reimbursement": {
+      "covered": false,
+      "daily_limit": null,
+      "max_days": null
+    }
+  },
+  "coverage_at_time_of_loss": {
+    "date_of_loss": "2026-09-25",
+    "policy_cancellation_date": "2026-07-15",
+    "days_since_cancellation": 72,
+    "coverage_active_at_loss": false,
+    "determination": "CLAIM DENIED \u00e2\u20ac\u201d No active coverage. Policy was cancelled 72 days before the date of loss due to non-payment. Claimant was mailed a cancellation notice on 2026-07-01 (certified, return receipt requested) and a final cancellation confirmation on 2026-07-15. Claimant did not reinstate the policy."
+  },
+  "claim_history": {
+    "total_claims_all_time": 2,
+    "claims_last_12_months": 1,
+    "claims_last_24_months": 2,
+    "prior_claims": [
+      {
+        "claim_id": "CLM-2026-00065",
+        "date": "2026-04-08",
+        "type": "Collision \u00e2\u20ac\u201d Rear-ended in stop-and-go traffic",
+        "amount_paid": 2900.0,
+        "fault": "Not-at-fault"
+      },
+      {
+        "claim_id": "CLM-2025-00712",
+        "date": "2025-07-22",
+        "type": "Comprehensive \u00e2\u20ac\u201d Hail damage",
+        "amount_paid": 1800.0,
+        "fault": "Not-at-fault"
+      }
+    ]
+  }
+}

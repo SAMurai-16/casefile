@@ -1,0 +1,74 @@
+{
+  "document_type": "Policy & Coverage Record",
+  "claim_id": "CLM-2026-10018",
+  "retrieval_timestamp": "2026-09-22T15:18:44Z",
+  "policy": {
+    "policy_number": "PGR-WA-2025-557283",
+    "product_name": "Progressive Advantage \u00e2\u20ac\u201d Full Coverage",
+    "status": "Active",
+    "effective_date": "2025-01-10",
+    "expiration_date": "2027-01-10",
+    "premium_monthly": 162.0,
+    "premium_status": "Current \u00e2\u20ac\u201d last payment 2026-09-10",
+    "auto_renewal": true
+  },
+  "policyholder": {
+    "name": "Susan Jean Nakamura",
+    "date_of_birth": "1978-03-22",
+    "address": "3412 Beacon Avenue S, Seattle, WA 98144",
+    "phone": "(206) 555-0412",
+    "email": "susan.nakamura@outlook.com",
+    "drivers_license": "WA-DL-NAKAMS478QJ",
+    "credit_tier": "Preferred Plus"
+  },
+  "insured_vehicle": {
+    "year": 2024,
+    "make": "Toyota",
+    "model": "RAV4 XLE",
+    "vin": "2T3P1RFV3RW284619",
+    "annual_mileage_estimate": 10000,
+    "garaging_zip": "98144",
+    "lienholder": "None \u00e2\u20ac\u201d vehicle owned outright"
+  },
+  "coverage": {
+    "collision": {
+      "covered": true,
+      "per_incident_limit": 30000.0,
+      "deductible": 500.0
+    },
+    "comprehensive": {
+      "covered": true,
+      "per_incident_limit": 30000.0,
+      "deductible": 250.0
+    },
+    "property_damage_liability": {
+      "covered": true,
+      "per_incident_limit": 100000.0,
+      "deductible": 0
+    },
+    "bodily_injury_liability": {
+      "covered": true,
+      "per_person_limit": 100000.0,
+      "per_incident_limit": 300000.0
+    },
+    "uninsured_motorist": {
+      "covered": true,
+      "per_incident_limit": 100000.0
+    },
+    "medical_payments": {
+      "covered": true,
+      "per_person_limit": 10000.0
+    },
+    "rental_reimbursement": {
+      "covered": true,
+      "daily_limit": 50.0,
+      "max_days": 30
+    }
+  },
+  "claim_history": {
+    "total_claims_all_time": 0,
+    "claims_last_12_months": 0,
+    "claims_last_24_months": 0,
+    "prior_claims": []
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "document_type": "Medical Services Billing Statement",
+  "claim_reference": "CLM-2026-00147",
+  "billing_provider": {
+    "clinic_name": "Austin Family Medicine & Urgent Care",
+    "physician": "Dr. Priya Sharma, M.D.",
+    "address": "1705 South First Street, Austin, TX 78704",
+    "phone": "(512) 555-0811",
+    "npi_number": "1487291038"
+  },
+  "patient_info": {
+    "patient_name": "Maria Gonzalez",
+    "date_of_birth": "1982-06-14",
+    "account_number": "AFM-2026-9921"
+  },
+  "encounter_details": {
+    "date_of_service": "2026-09-15",
+    "chief_complaint": "Acute neck pain, stiffness, and occipital headache following motor vehicle rear-end collision on 09/14/2026.",
+    "diagnosis_code": "M54.2 - Cervicalgia / Acute Cervical Strain",
+    "services_rendered": [
+      {
+        "cpt_code": "99214",
+        "description": "Office/outpatient visit for evaluation and management of established patient (moderate complexity)",
+        "charge": 185.00
+      },
+      {
+        "cpt_code": "72040",
+        "description": "Radiologic examination, spine, cervical; 2 or 3 views",
+        "charge": 145.00
+      },
+      {
+        "cpt_code": "99070",
+        "description": "Therapeutic supplies (soft cervical collar, prescription NSAID/muscle relaxant starter pack)",
+        "charge": 50.00
+      }
+    ],
+    "total_charges_billed": 380.00,
+    "insurance_payment_received": 0.00,
+    "patient_balance_due": 380.00
+  }
+}

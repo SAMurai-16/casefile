@@ -1,0 +1,191 @@
+{
+  "estimate_source_system": "CCC ONE Estimating Suite v24.2",
+  "repair_facility": {
+    "facility_name": "Lone Star Collision Center",
+    "facility_tax_id": "74-3298105",
+    "facility_license": "TX-ABR-11927",
+    "street": "3410 South Lamar Blvd",
+    "city_state_zip": "Austin, TX 78704",
+    "phone_contact": "(512) 555-0334",
+    "appraiser": "Carlos Mendoza (I-CAR Platinum / ASE B2)"
+  },
+  "claim_reference": {
+    "claim_no": "CLM-2026-10016",
+    "estimate_no": "EST-2026-09-A0482",
+    "date_of_estimate": "2026-09-16"
+  },
+  "vehicle_profile": {
+    "vin_17": "2HGFE2F59PH512847",
+    "yr_make_model": "2023 Honda Civic EX 4-Door",
+    "ext_color": "Lunar Silver Metallic (NH-830M)",
+    "odometer": 28450,
+    "plate": "TX-MKL-4927"
+  },
+  "posted_rates": {
+    "body_rate_hr": 62.0,
+    "paint_rate_hr": 68.0,
+    "mech_rate_hr": 95.0,
+    "paint_materials_hr": 37.0
+  },
+  "estimate_lines": [
+    {
+      "line": 1,
+      "op": "R&R",
+      "item_desc": "OEM RR BUMPER COVER (04715-T20-A90ZA)",
+      "type": "OEM",
+      "part_price": 485.0,
+      "bdy_hrs": 2.5,
+      "paint_hrs": 3.0,
+      "mech_hrs": null,
+      "line_cost": 844.0
+    },
+    {
+      "line": 2,
+      "op": "R&R",
+      "item_desc": "OEM RR REBAR / IMPACT BAR",
+      "type": "OEM",
+      "part_price": 215.0,
+      "bdy_hrs": 0.0,
+      "paint_hrs": null,
+      "mech_hrs": null,
+      "line_cost": 215.0
+    },
+    {
+      "line": 3,
+      "op": "R&R",
+      "item_desc": "OEM ABSORBER, RR BUMPER",
+      "type": "OEM",
+      "part_price": 78.0,
+      "bdy_hrs": 0.0,
+      "paint_hrs": null,
+      "mech_hrs": null,
+      "line_cost": 78.0
+    },
+    {
+      "line": 4,
+      "op": "R&R",
+      "item_desc": "OEM TRUNK LID SHELL",
+      "type": "OEM",
+      "part_price": 620.0,
+      "bdy_hrs": 3.0,
+      "paint_hrs": 3.5,
+      "mech_hrs": null,
+      "line_cost": 1044.0
+    },
+    {
+      "line": 5,
+      "op": "R&R",
+      "item_desc": "OEM LATCH & STRIKER ASSY, TRUNK",
+      "type": "OEM",
+      "part_price": 95.0,
+      "bdy_hrs": 0.0,
+      "paint_hrs": null,
+      "mech_hrs": null,
+      "line_cost": 95.0
+    },
+    {
+      "line": 6,
+      "op": "R&R",
+      "item_desc": "OEM COMBINATION LAMP ASSY, LT LED",
+      "type": "OEM",
+      "part_price": 310.0,
+      "bdy_hrs": 0.5,
+      "paint_hrs": null,
+      "mech_hrs": null,
+      "line_cost": 341.0
+    },
+    {
+      "line": 7,
+      "op": "R&R",
+      "item_desc": "OEM COMBINATION LAMP ASSY, RT LED",
+      "type": "OEM",
+      "part_price": 310.0,
+      "bdy_hrs": 0.5,
+      "paint_hrs": null,
+      "mech_hrs": null,
+      "line_cost": 341.0
+    },
+    {
+      "line": 8,
+      "op": "R&R",
+      "item_desc": "OEM ULTRASONIC PARKING SENSOR PAIR",
+      "type": "OEM",
+      "part_price": 145.0,
+      "bdy_hrs": null,
+      "paint_hrs": null,
+      "mech_hrs": 0.5,
+      "line_cost": 192.5
+    },
+    {
+      "line": 9,
+      "op": "REPR",
+      "item_desc": "LT REAR QUARTER PANEL DENT REPAIR / PDR",
+      "type": null,
+      "part_price": 0.0,
+      "bdy_hrs": 1.5,
+      "paint_hrs": 1.5,
+      "mech_hrs": null,
+      "line_cost": 195.0
+    },
+    {
+      "line": 10,
+      "op": "REPR",
+      "item_desc": "RT REAR QUARTER PANEL PULL & DRESS",
+      "type": null,
+      "part_price": 0.0,
+      "bdy_hrs": 0.5,
+      "paint_hrs": null,
+      "mech_hrs": null,
+      "line_cost": 31.0
+    },
+    {
+      "line": 11,
+      "op": "SUBLET",
+      "item_desc": "HONDA DEALER SUBLET: REAR RADAR / CAMERA SENSORS AIMING & CALIB",
+      "type": "SUB",
+      "part_price": 175.0,
+      "bdy_hrs": null,
+      "paint_hrs": null,
+      "mech_hrs": null,
+      "line_cost": 175.0
+    },
+    {
+      "line": 12,
+      "op": "MECH",
+      "item_desc": "CHECK & ADJUST 4-WHEEL ALIGNMENT",
+      "type": null,
+      "part_price": 0.0,
+      "bdy_hrs": null,
+      "paint_hrs": null,
+      "mech_hrs": 1.0,
+      "line_cost": 95.0
+    },
+    {
+      "line": 13,
+      "op": "MATL",
+      "item_desc": "PAINT & REFINISH MATERIALS (5.0 PAINT HRS X $37/HR)",
+      "type": "MATL",
+      "part_price": 185.0,
+      "bdy_hrs": null,
+      "paint_hrs": null,
+      "mech_hrs": null,
+      "line_cost": 185.0
+    }
+  ],
+  "totals_breakdown": {
+    "total_parts_cost": 2258.0,
+    "total_labor_body": 527.0,
+    "total_labor_paint": 544.0,
+    "total_paint_materials": 185.0,
+    "total_labor_mechanical": 142.5,
+    "total_sublet": 175.0,
+    "net_subtotal": 3831.5,
+    "state_sales_tax_calc": {
+      "rate": 0.0825,
+      "taxable_basis": 2258.0,
+      "tax_due": 186.29
+    },
+    "claimed_grand_total": 4017.79
+  },
+  "appraiser_notes": "All replacements quoted as genuine Honda OEM per policy guidelines. Teardown needed to confirm condition of rear floor pan and rear bumper mounting bracket alignment. Supplement may follow."
+}

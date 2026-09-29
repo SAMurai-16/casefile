@@ -1,0 +1,82 @@
+{
+  "document_type": "Policy & Coverage Record",
+  "claim_id": "CLM-2026-10021",
+  "retrieval_timestamp": "2026-09-15T09:32:14Z",
+  "policy": {
+    "policy_number": "HIC-TX-2024-884712",
+    "product_name": "AutoGuard Plus \u00e2\u20ac\u201d Full Coverage",
+    "status": "Active",
+    "effective_date": "2024-03-01",
+    "expiration_date": "2027-03-01",
+    "premium_monthly": 187.5,
+    "premium_status": "Current \u00e2\u20ac\u201d last payment 2026-09-01",
+    "auto_renewal": true
+  },
+  "policyholder": {
+    "name": "Maria Elena Gonzalez",
+    "date_of_birth": "1982-06-14",
+    "address": "1204 East Riverside Drive, Apt 3B, Austin, TX 78741",
+    "phone": "(512) 555-0198",
+    "email": "m.gonzalez82@email.com",
+    "drivers_license": "TX-DL-29847103",
+    "credit_tier": "Preferred"
+  },
+  "insured_vehicle": {
+    "year": 2023,
+    "make": "Honda",
+    "model": "Civic EX",
+    "vin": "2HGFE2F59PH512847",
+    "annual_mileage_estimate": 12000,
+    "garaging_zip": "78741",
+    "lienholder": "Toyota Financial Services (lien active)"
+  },
+  "coverage": {
+    "collision": {
+      "covered": true,
+      "per_incident_limit": 25000.0,
+      "deductible": 500.0
+    },
+    "comprehensive": {
+      "covered": true,
+      "per_incident_limit": 25000.0,
+      "deductible": 250.0
+    },
+    "property_damage_liability": {
+      "covered": true,
+      "per_incident_limit": 50000.0,
+      "deductible": 0
+    },
+    "bodily_injury_liability": {
+      "covered": true,
+      "per_person_limit": 50000.0,
+      "per_incident_limit": 100000.0
+    },
+    "uninsured_motorist": {
+      "covered": true,
+      "per_incident_limit": 50000.0
+    },
+    "medical_payments": {
+      "covered": true,
+      "per_person_limit": 5000.0
+    },
+    "rental_reimbursement": {
+      "covered": true,
+      "daily_limit": 45.0,
+      "max_days": 30
+    }
+  },
+  "claim_history": {
+    "total_claims_all_time": 1,
+    "claims_last_12_months": 0,
+    "claims_last_24_months": 1,
+    "prior_claims": [
+      {
+        "claim_id": "CLM-2025-00439",
+        "date": "2025-02-10",
+        "type": "Comprehensive \u00e2\u20ac\u201d Windshield Replacement",
+        "amount_paid": 412.0,
+        "fault": "Not-at-fault (road debris)"
+      }
+    ]
+  }
+}

@@ -1,0 +1,224 @@
+{
+  "system_identifier": "Caliber Collision Estimating Platform - WorkOrder #49102",
+  "shop_branch": {
+    "center_name": "Caliber Collision \u2014 Dallas Greenville",
+    "fein_tax": "75-4102893",
+    "facility_license": "TX-ABR-29441",
+    "address": "5927 Greenville Avenue, Dallas, TX 75206",
+    "contact_phone": "(214) 555-0944",
+    "estimator_in_charge": "Jessica Morales (I-CAR Gold Class)"
+  },
+  "claim_docket": {
+    "carrier_claim_id": "CLM-2026-10010",
+    "caliber_order_num": "EST-2026-09-E0221",
+    "created_on": "2026-09-26"
+  },
+  "loss_vehicle": {
+    "vin": "1N4BL4CV5MN347812",
+    "vehicle_description": "2021 Nissan Altima 2.5 SR Sedan",
+    "color": "Scarlet Ember Tintcoat (NBL)",
+    "odometer": 52100,
+    "license_plate": "TX-HPW-6619"
+  },
+  "labor_rate_table": {
+    "sheet_metal_rate": 60.0,
+    "refinish_rate": 66.0,
+    "frame_structural_rate": 78.0,
+    "diagnostic_mech_rate": 95.0
+  },
+  "repair_operations": [
+    {
+      "index": 1,
+      "operation_type": "Replace",
+      "description": "Right Front Fender Panel (Nissan OEM)",
+      "component_cost": 380.0,
+      "metal_labor_hrs": 3.5,
+      "paint_labor_hrs": 3.5,
+      "structural_hrs": 0.0,
+      "mech_hrs": 0.0
+    },
+    {
+      "index": 2,
+      "operation_type": "Replace",
+      "description": "Right Front Door Shell Assy",
+      "component_cost": 720.0,
+      "metal_labor_hrs": 5.0,
+      "paint_labor_hrs": 4.0,
+      "structural_hrs": 0.0,
+      "mech_hrs": 0.0
+    },
+    {
+      "index": 3,
+      "operation_type": "Replace",
+      "description": "Right Front Door Laminated Tempered Glass",
+      "component_cost": 185.0,
+      "metal_labor_hrs": 0.5,
+      "paint_labor_hrs": 0.0,
+      "structural_hrs": 0.0,
+      "mech_hrs": 0.0
+    },
+    {
+      "index": 4,
+      "operation_type": "Replace",
+      "description": "Power Window Regulator & Motor Kit",
+      "component_cost": 165.0,
+      "metal_labor_hrs": 0.5,
+      "paint_labor_hrs": 0.0,
+      "structural_hrs": 0.0,
+      "mech_hrs": 0.0
+    },
+    {
+      "index": 5,
+      "operation_type": "Replace",
+      "description": "Passenger Door Interior Trim Panel & Armrest",
+      "component_cost": 290.0,
+      "metal_labor_hrs": 0.5,
+      "paint_labor_hrs": 0.0,
+      "structural_hrs": 0.0,
+      "mech_hrs": 0.0
+    },
+    {
+      "index": 6,
+      "operation_type": "Replace",
+      "description": "Front Bumper Cover (Fascia)",
+      "component_cost": 340.0,
+      "metal_labor_hrs": 1.0,
+      "paint_labor_hrs": 2.5,
+      "structural_hrs": 0.0,
+      "mech_hrs": 0.0
+    },
+    {
+      "index": 7,
+      "operation_type": "Replace",
+      "description": "Right LED Projector Headlamp Assembly",
+      "component_cost": 620.0,
+      "metal_labor_hrs": 1.0,
+      "paint_labor_hrs": 0.0,
+      "structural_hrs": 0.0,
+      "mech_hrs": 0.0
+    },
+    {
+      "index": 8,
+      "operation_type": "Replace",
+      "description": "Right Front Factory 19-inch Alloy Wheel",
+      "component_cost": 410.0,
+      "metal_labor_hrs": 0.0,
+      "paint_labor_hrs": 0.0,
+      "structural_hrs": 0.0,
+      "mech_hrs": 0.5
+    },
+    {
+      "index": 9,
+      "operation_type": "Replace",
+      "description": "Bridgestone Turanza 235/40R19 Tire",
+      "component_cost": 195.0,
+      "metal_labor_hrs": 0.0,
+      "paint_labor_hrs": 0.0,
+      "structural_hrs": 0.0,
+      "mech_hrs": 0.0
+    },
+    {
+      "index": 10,
+      "operation_type": "Replace",
+      "description": "Passenger Side Torso / Curtain Airbag Module (DEPLOYED)",
+      "component_cost": 890.0,
+      "metal_labor_hrs": 0.0,
+      "paint_labor_hrs": 0.0,
+      "structural_hrs": 0.0,
+      "mech_hrs": 1.0
+    },
+    {
+      "index": 11,
+      "operation_type": "Replace",
+      "description": "SRS Airbag Diagnostic Control Unit & Impact Sensors",
+      "component_cost": 450.0,
+      "metal_labor_hrs": 0.0,
+      "paint_labor_hrs": 0.0,
+      "structural_hrs": 0.0,
+      "mech_hrs": 1.0
+    },
+    {
+      "index": 12,
+      "operation_type": "Replace",
+      "description": "Right Power Heated Exterior Mirror Assembly",
+      "component_cost": 220.0,
+      "metal_labor_hrs": 0.0,
+      "paint_labor_hrs": 0.0,
+      "structural_hrs": 0.0,
+      "mech_hrs": 0.0
+    },
+    {
+      "index": 13,
+      "operation_type": "Misc",
+      "description": "Hardware, door seals, clips, wire harness splice pack",
+      "component_cost": 135.0,
+      "metal_labor_hrs": 0.0,
+      "paint_labor_hrs": 0.0,
+      "structural_hrs": 0.0,
+      "mech_hrs": 0.0
+    },
+    {
+      "index": 14,
+      "operation_type": "Blend",
+      "description": "Refinish color blend to right rear door",
+      "component_cost": 0.0,
+      "metal_labor_hrs": 0.0,
+      "paint_labor_hrs": 2.0,
+      "structural_hrs": 0.0,
+      "mech_hrs": 0.0
+    },
+    {
+      "index": 15,
+      "operation_type": "Structural",
+      "description": "Setup on 3D Car-O-Liner frame machine; laser measure & realign right lower A-pillar / floor rail",
+      "component_cost": 0.0,
+      "metal_labor_hrs": 0.0,
+      "paint_labor_hrs": 0.0,
+      "structural_hrs": 2.0,
+      "mech_hrs": 0.0
+    },
+    {
+      "index": 16,
+      "operation_type": "Sublet",
+      "description": "Dallas Nissan dealership SRS airbag deployment diagnostic clear and final factory safety sign-off",
+      "component_cost": 225.0,
+      "metal_labor_hrs": 0.0,
+      "paint_labor_hrs": 0.0,
+      "structural_hrs": 0.0,
+      "mech_hrs": 0.0
+    },
+    {
+      "index": 17,
+      "operation_type": "Align",
+      "description": "Four-wheel computerized alignment check",
+      "component_cost": 0.0,
+      "metal_labor_hrs": 0.0,
+      "paint_labor_hrs": 0.0,
+      "structural_hrs": 0.0,
+      "mech_hrs": 1.0
+    },
+    {
+      "index": 18,
+      "operation_type": "Materials",
+      "description": "Axalta Cromax tri-coat paint supplies and reducers",
+      "component_cost": 240.0,
+      "metal_labor_hrs": 0.0,
+      "paint_labor_hrs": 0.0,
+      "structural_hrs": 0.0,
+      "mech_hrs": 0.0
+    }
+  ],
+  "accounting_summary": {
+    "total_parts_price": 5000.0,
+    "total_body_labor": 720.0,
+    "total_paint_labor": 792.0,
+    "total_paint_materials": 240.0,
+    "total_mechanical_labor": 332.5,
+    "total_structural_labor": 156.0,
+    "total_sublet_charges": 225.0,
+    "subtotal_pre_tax": 7465.5,
+    "dallas_county_sales_tax_8_25_pct": 412.5,
+    "total_amount_invoiced": 7878.0
+  },
+  "safety_disclaimer": "Airbag deployment mandates mandatory replacement of all passenger restraint components and dealer calibration per Nissan Service Bulletin #NTB21-044."
+}

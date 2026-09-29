@@ -1,0 +1,202 @@
+{
+  "estimating_system": "Mitchell Ultramate v2026.3 - Enterprise",
+  "header": {
+    "repair_facility": "Prestige Auto Body & Paint",
+    "fein": "36-4819207",
+    "state_reg": "IL-VRF-44829",
+    "address_line": "7820 South Stony Island Ave, Chicago, IL 60649",
+    "telephone": "(773) 555-0291",
+    "writer": "Anthony Russo"
+  },
+  "claim_info": {
+    "claim_file_id": "CLM-2026-10007",
+    "mitchell_est_id": "EST-2026-09-B1147",
+    "print_date": "2026-09-21"
+  },
+  "insured_vehicle": {
+    "vin": "3MW5R1J05N8B74291",
+    "model_year": 2022,
+    "make_model": "BMW 330i xDrive Sedan",
+    "finish_color": "Alpine White (300)",
+    "mileage_in": 41200,
+    "lic_plate": "IL-DPX-8841"
+  },
+  "labor_matrix": {
+    "body": {
+      "rate": 72.0
+    },
+    "refinish": {
+      "rate": 74.0
+    },
+    "mechanical": {
+      "rate": 110.0
+    }
+  },
+  "line_items": [
+    {
+      "line_no": 1,
+      "operation": "R&R",
+      "description": "HOOD PANEL ASSY (BMW 41-00-7-492-747)",
+      "part_source": "OEM",
+      "part_amt": 1250.0,
+      "labor_cat": "BDY",
+      "labor_hrs": 3.5,
+      "paint_hrs": 4.0
+    },
+    {
+      "line_no": 2,
+      "operation": "R&R",
+      "description": "FRT BUMPER COVER W/SENSOR CUTOUTS",
+      "part_source": "OEM",
+      "part_amt": 890.0,
+      "labor_cat": "BDY",
+      "labor_hrs": 3.0,
+      "paint_hrs": 3.5
+    },
+    {
+      "line_no": 3,
+      "operation": "R&R",
+      "description": "RT FRT FENDER PANEL (ALUMINUM)",
+      "part_source": "OEM",
+      "part_amt": 1180.0,
+      "labor_cat": "BDY",
+      "labor_hrs": 4.0,
+      "paint_hrs": 3.5
+    },
+    {
+      "line_no": 4,
+      "operation": "R&R",
+      "description": "RT ADAPTIVE FULL-LED HEADLAMP MODULE",
+      "part_source": "OEM",
+      "part_amt": 1850.0,
+      "labor_cat": "BDY",
+      "labor_hrs": 1.0,
+      "paint_hrs": null
+    },
+    {
+      "line_no": 5,
+      "operation": "R&R",
+      "description": "RADIATOR ASSY W/TRANS COOLER INTEGRATION",
+      "part_source": "OEM",
+      "part_amt": 720.0,
+      "labor_cat": "MECH",
+      "labor_hrs": 3.0,
+      "paint_hrs": null
+    },
+    {
+      "line_no": 6,
+      "operation": "R&R",
+      "description": "A/C CONDENSER CORE",
+      "part_source": "OEM",
+      "part_amt": 485.0,
+      "labor_cat": "MECH",
+      "labor_hrs": 1.5,
+      "paint_hrs": null
+    },
+    {
+      "line_no": 7,
+      "operation": "R&R",
+      "description": "RT FRT 18 INCH M-SPORT ALLOY WHEEL",
+      "part_source": "OEM",
+      "part_amt": 680.0,
+      "labor_cat": "BDY",
+      "labor_hrs": 0.5,
+      "paint_hrs": null
+    },
+    {
+      "line_no": 8,
+      "operation": "R&R",
+      "description": "RT POWER MIRROR ASSY (CAM/HEAT/DIM)",
+      "part_source": "OEM",
+      "part_amt": 620.0,
+      "labor_cat": "BDY",
+      "labor_hrs": 0.5,
+      "paint_hrs": null
+    },
+    {
+      "line_no": 9,
+      "operation": "R&R",
+      "description": "ALUMINUM BUMPER REINFORCEMENT BAR",
+      "part_source": "OEM",
+      "part_amt": 340.0,
+      "labor_cat": "BDY",
+      "labor_hrs": 0.0,
+      "paint_hrs": null
+    },
+    {
+      "line_no": 10,
+      "operation": "R&R",
+      "description": "UPPER RADIATOR TIE-BAR SUPPORT",
+      "part_source": "OEM",
+      "part_amt": 290.0,
+      "labor_cat": "BDY",
+      "labor_hrs": 0.0,
+      "paint_hrs": null
+    },
+    {
+      "line_no": 11,
+      "operation": "MISC",
+      "description": "OEM FASTENERS, CLIPS, BMW HT-12 COOLANT",
+      "part_source": "OEM",
+      "part_amt": 175.0,
+      "labor_cat": null,
+      "labor_hrs": null,
+      "paint_hrs": null
+    },
+    {
+      "line_no": 12,
+      "operation": "BLEND",
+      "description": "COLOR BLEND RT FRONT PASSENGER DOOR",
+      "part_source": null,
+      "part_amt": 0.0,
+      "labor_cat": "PNT",
+      "labor_hrs": null,
+      "paint_hrs": 2.0
+    },
+    {
+      "line_no": 13,
+      "operation": "MECH",
+      "description": "4-WHEEL SUSPENSION GEOMETRY ALIGNMENT",
+      "part_source": null,
+      "part_amt": 0.0,
+      "labor_cat": "MECH",
+      "labor_hrs": 1.0,
+      "paint_hrs": null
+    },
+    {
+      "line_no": 14,
+      "operation": "SUBLET",
+      "description": "BMW DEALER CALIBRATION - KAFAS FRONT ADAS CAMERA",
+      "part_source": "SUB",
+      "part_amt": 450.0,
+      "labor_cat": null,
+      "labor_hrs": null,
+      "paint_hrs": null
+    },
+    {
+      "line_no": 15,
+      "operation": "SUBLET",
+      "description": "BMW DEALER AIMING - ADAPTIVE LED HEADLIGHT SYSTEM",
+      "part_source": "SUB",
+      "part_amt": 225.0,
+      "labor_cat": null,
+      "labor_hrs": null,
+      "paint_hrs": null
+    }
+  ],
+  "financial_summary": {
+    "parts_subtotal": 8280.0,
+    "body_labor_amount": 900.0,
+    "paint_labor_amount": 962.0,
+    "paint_materials_amount": 320.0,
+    "mechanical_labor_amount": 605.0,
+    "sublet_charges": 675.0,
+    "pre_tax_total": 11742.0,
+    "cook_county_chicago_tax": {
+      "rate": 0.1025,
+      "tax_amount": 848.7
+    },
+    "invoice_grand_total": 12590.7
+  },
+  "remarks": "Vehicle towed to facility in non-drivable condition. Right suspension strut and subframe inspection pending disassembly. Notice to insurer: estimated repairs approach vehicle threshold."
+}

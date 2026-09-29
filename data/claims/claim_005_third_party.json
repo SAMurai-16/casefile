@@ -1,0 +1,32 @@
+{
+  "document_type": "Third-Party Loss Notice & Subrogation Demand",
+  "carrier_claim_id": "CLM-2026-00299",
+  "third_party_claimant": {
+    "name": "Michael R. Torres",
+    "address": "4810 Skillman Street, Dallas, TX 75206",
+    "phone": "(214) 555-0391",
+    "insurance_carrier": "USAA Casualty Insurance",
+    "usaa_claim_number": "US-8827-TX-112-01"
+  },
+  "loss_event": {
+    "date": "2026-09-25",
+    "location": "Mockingbird Ln & Greenville Ave, Dallas, TX",
+    "police_case_number": "DPD-2026-092548",
+    "at_fault_driver": "Angela D. Washington (Cited for running red light)"
+  },
+  "claimed_damages": {
+    "vehicle_property_damage": {
+      "vehicle": "2024 Chevrolet Equinox RS (TX-LMN-4420)",
+      "repair_estimate_amount": 3100.00,
+      "repairer": "Classic Chevrolet Collision Center"
+    },
+    "bodily_injury": {
+      "injured_party": "Michael R. Torres",
+      "treatment_facility": "Baylor University Medical Center Emergency Dept",
+      "injuries": "Cervical spine sprain, right shoulder contusion, post-concussive headache",
+      "emergency_room_and_ems_bill": 4200.00
+    },
+    "total_third_party_demand": 7300.00
+  },
+  "legal_notice": "Claimant asserts full right of recovery against Angela Washington and her liability carrier for total damages of $7,300.00."
+}

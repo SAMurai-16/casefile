@@ -1,0 +1,26 @@
+{
+  "document_type": "Rental Vehicle Invoice & Final Receipt",
+  "claim_reference": "CLM-2026-00147",
+  "rental_agency": {
+    "name": "Enterprise Rent-A-Car",
+    "branch": "Austin South Lamar - Branch #2304",
+    "phone": "(512) 555-0720",
+    "tax_id": "43-0982314"
+  },
+  "renter": {
+    "name": "Maria Gonzalez",
+    "drivers_license": "TX-DL-29847103"
+  },
+  "rental_details": {
+    "invoice_number": "ENT-TX-2026-88192",
+    "vehicle_assigned": "2024 Nissan Sentra (Compact Sedan)",
+    "start_date": "2026-09-16",
+    "end_date": "2026-09-24",
+    "days_billed": 8,
+    "daily_rate": 42.00,
+    "rental_charges": 336.00,
+    "sales_tax": 27.72,
+    "total_invoice_amount": 363.72
+  },
+  "notes": "Vehicle rented while personal vehicle (2023 Honda Civic) was in repair shop for collision repairs."
+}

@@ -1,0 +1,267 @@
+{
+  "estimate_system": "Audatex Collision Estimating Platinum v8.1",
+  "repair_center": {
+    "name": "Buckhead European Auto Body (MB Certified Collision)",
+    "tax_ein": "58-2910374",
+    "repairer_reg_no": "GA-MVR-73891",
+    "location": "2980 Piedmont Road NE, Atlanta, GA 30305",
+    "phone": "(404) 555-0178",
+    "lead_estimator": "Frank DeLuca (MB Collision Master Tech)"
+  },
+  "metadata": {
+    "ins_claim_number": "CLM-2026-10029",
+    "estimate_id": "EST-2026-09-D0447",
+    "assessment_date": "2026-09-25"
+  },
+  "unit_under_repair": {
+    "vin_serial": "W1KWF8DB2LR598217",
+    "vehicle_descr": "2020 Mercedes-Benz C300 4MATIC Sedan",
+    "exterior_finish": "Obsidian Black Metallic (197)",
+    "odometer_miles": 68700,
+    "tag_number": "GA-RTX-2204"
+  },
+  "shop_rates": {
+    "body_hr": 78.0,
+    "paint_hr": 78.0,
+    "frame_hr": 95.0,
+    "mechanical_hr": 125.0
+  },
+  "itemized_operations": [
+    {
+      "seq": 1,
+      "action": "R&R",
+      "item": "FRT BUMPER COVER ASSY AMG LINE (MB 205-885-47-00)",
+      "cat": "PARTS",
+      "part_cost": 1420.0,
+      "bdy_hrs": 4.0,
+      "pnt_hrs": 4.0,
+      "mch_hrs": 0.0
+    },
+    {
+      "seq": 2,
+      "action": "R&R",
+      "item": "ALUMINUM IMPACT REINFORCEMENT CROSSMEMBER",
+      "cat": "PARTS",
+      "part_cost": 680.0,
+      "bdy_hrs": 0.0,
+      "pnt_hrs": 0.0,
+      "mch_hrs": 0.0
+    },
+    {
+      "seq": 3,
+      "action": "R&R",
+      "item": "HOOD PANEL ASSY (ALUMINUM)",
+      "cat": "PARTS",
+      "part_cost": 1850.0,
+      "bdy_hrs": 3.5,
+      "pnt_hrs": 4.5,
+      "mch_hrs": 0.0
+    },
+    {
+      "seq": 4,
+      "action": "R&R",
+      "item": "LT MULTIBEAM LED HEADLAMP UNIT",
+      "cat": "PARTS",
+      "part_cost": 2400.0,
+      "bdy_hrs": 0.75,
+      "pnt_hrs": 0.0,
+      "mch_hrs": 0.0
+    },
+    {
+      "seq": 5,
+      "action": "R&R",
+      "item": "RT MULTIBEAM LED HEADLAMP UNIT",
+      "cat": "PARTS",
+      "part_cost": 2400.0,
+      "bdy_hrs": 0.75,
+      "pnt_hrs": 0.0,
+      "mch_hrs": 0.0
+    },
+    {
+      "seq": 6,
+      "action": "R&R",
+      "item": "MAIN ENGINE COOLING RADIATOR (W/TRANS COOLER)",
+      "cat": "PARTS",
+      "part_cost": 890.0,
+      "bdy_hrs": 0.0,
+      "pnt_hrs": 0.0,
+      "mch_hrs": 2.0
+    },
+    {
+      "seq": 7,
+      "action": "R&R",
+      "item": "A/C CONDENSER MATRIX",
+      "cat": "PARTS",
+      "part_cost": 540.0,
+      "bdy_hrs": 0.0,
+      "pnt_hrs": 0.0,
+      "mch_hrs": 1.5
+    },
+    {
+      "seq": 8,
+      "action": "R&R",
+      "item": "LOWER ENGINE CRANKCASE OIL PAN (ALUMINUM)",
+      "cat": "PARTS",
+      "part_cost": 620.0,
+      "bdy_hrs": 0.0,
+      "pnt_hrs": 0.0,
+      "mch_hrs": 1.5
+    },
+    {
+      "seq": 9,
+      "action": "R&R",
+      "item": "FRONT SUSPENSION SUBFRAME / AXLE CARRIER",
+      "cat": "PARTS",
+      "part_cost": 2200.0,
+      "bdy_hrs": 0.0,
+      "pnt_hrs": 0.0,
+      "mch_hrs": 8.0
+    },
+    {
+      "seq": 10,
+      "action": "R&R",
+      "item": "RT FRONT STEERING KNUCKLE / WHEEL BEARING CARRIER",
+      "cat": "PARTS",
+      "part_cost": 780.0,
+      "bdy_hrs": 0.0,
+      "pnt_hrs": 0.0,
+      "mch_hrs": 2.0
+    },
+    {
+      "seq": 11,
+      "action": "R&R",
+      "item": "RT FRONT WISHBONE CONTROL ARMS (PAIR)",
+      "cat": "PARTS",
+      "part_cost": 840.0,
+      "bdy_hrs": 0.0,
+      "pnt_hrs": 0.0,
+      "mch_hrs": 2.0
+    },
+    {
+      "seq": 12,
+      "action": "R&R",
+      "item": "RT FRONT 4MATIC STRUT / SPRING ASSEMBLY",
+      "cat": "PARTS",
+      "part_cost": 510.0,
+      "bdy_hrs": 0.0,
+      "pnt_hrs": 0.0,
+      "mch_hrs": 2.0
+    },
+    {
+      "seq": 13,
+      "action": "R&R",
+      "item": "RT FRONT AMG 18 INCH 5-SPOKE ALLOY WHEEL",
+      "cat": "PARTS",
+      "part_cost": 720.0,
+      "bdy_hrs": 0.0,
+      "pnt_hrs": 0.0,
+      "mch_hrs": 0.0
+    },
+    {
+      "seq": 14,
+      "action": "R&R",
+      "item": "CONTINENTAL TIRE 225/45R18 MO EXTENDED",
+      "cat": "PARTS",
+      "part_cost": 210.0,
+      "bdy_hrs": 0.0,
+      "pnt_hrs": 0.0,
+      "mch_hrs": 0.0
+    },
+    {
+      "seq": 15,
+      "action": "R&R",
+      "item": "LOWER ENGINE SPLASH SHIELDS & BELLY PANS",
+      "cat": "PARTS",
+      "part_cost": 380.0,
+      "bdy_hrs": 0.0,
+      "pnt_hrs": 0.0,
+      "mch_hrs": 0.0
+    },
+    {
+      "seq": 16,
+      "action": "MISC",
+      "item": "SYNTHETIC MOTOR OIL (7 QTS), COOLANT, R134A GAS",
+      "cat": "PARTS",
+      "part_cost": 245.0,
+      "bdy_hrs": 0.0,
+      "pnt_hrs": 0.0,
+      "mch_hrs": 0.0
+    },
+    {
+      "seq": 17,
+      "action": "MATL",
+      "item": "MERCEDES CERAMICLEAR TRI-COAT FINISH MATERIALS",
+      "cat": "MATL",
+      "part_cost": 380.0,
+      "bdy_hrs": 0.0,
+      "pnt_hrs": 0.0,
+      "mch_hrs": 0.0
+    },
+    {
+      "seq": 18,
+      "action": "ALIGN",
+      "item": "MERCEDES 4-WHEEL ELECTRONIC CHASSIS ALIGNMENT",
+      "cat": "LABOR",
+      "part_cost": 0.0,
+      "bdy_hrs": 0.0,
+      "pnt_hrs": 0.0,
+      "mch_hrs": 1.5
+    },
+    {
+      "seq": 19,
+      "action": "AC_SVC",
+      "item": "A/C SYSTEM RECOVERY, EVACUATION & RECHARGE",
+      "cat": "LABOR",
+      "part_cost": 0.0,
+      "bdy_hrs": 0.0,
+      "pnt_hrs": 0.0,
+      "mch_hrs": 1.5
+    },
+    {
+      "seq": 20,
+      "action": "SUBLET",
+      "item": "AUTHORIZED MB DEALER ADAS DISTRONIC RADAR / CAM SENSOR CALIB",
+      "cat": "SUBLET",
+      "part_cost": 650.0,
+      "bdy_hrs": 0.0,
+      "pnt_hrs": 0.0,
+      "mch_hrs": 0.0
+    },
+    {
+      "seq": 21,
+      "action": "SUBLET",
+      "item": "AUTHORIZED MB DEALER MULTIBEAM ACTIVE HEADLAMP AIMING",
+      "cat": "SUBLET",
+      "part_cost": 275.0,
+      "bdy_hrs": 0.0,
+      "pnt_hrs": 0.0,
+      "mch_hrs": 0.0
+    },
+    {
+      "seq": 22,
+      "action": "FEE",
+      "item": "WINCH TOW FROM ACCIDENT SCENE + SECURED LOT STORAGE (2 DAYS)",
+      "cat": "TOW_STOR",
+      "part_cost": 385.0,
+      "bdy_hrs": 0.0,
+      "pnt_hrs": 0.0,
+      "mch_hrs": 0.0
+    }
+  ],
+  "cost_recap": {
+    "total_replacement_parts": 16685.0,
+    "labor_body_total": 702.0,
+    "labor_paint_total": 663.0,
+    "materials_paint_total": 380.0,
+    "labor_mechanical_total": 2750.0,
+    "sublet_dealer_total": 925.0,
+    "towing_and_lot_storage": 385.0,
+    "total_pre_tax": 22490.0,
+    "fulton_county_ga_tax": {
+      "rate": 0.089,
+      "tax_applied_to_parts": 1484.97
+    },
+    "total_estimate_amount": 23974.97
+  },
+  "structural_notes": "CRITICAL: Estimate is at 88% of current ACV ($27,200). Subframe deformation indicates severe transverse loading. Total loss declaration advised before teardown authorization."
+}

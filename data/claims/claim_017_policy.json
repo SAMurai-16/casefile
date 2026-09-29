@@ -1,0 +1,96 @@
+{
+  "document_type": "Policy & Coverage Record",
+  "claim_id": "CLM-2026-10017",
+  "retrieval_timestamp": "2026-09-20T14:05:33Z",
+  "policy": {
+    "policy_number": "NWM-IL-2026-220184",
+    "product_name": "AutoShield \u00e2\u20ac\u201d Standard Coverage",
+    "status": "Active",
+    "effective_date": "2026-06-15",
+    "expiration_date": "2027-06-15",
+    "premium_monthly": 245.0,
+    "premium_status": "Current \u00e2\u20ac\u201d last payment 2026-09-15",
+    "auto_renewal": true
+  },
+  "policyholder": {
+    "name": "Derek Anthony Patterson",
+    "date_of_birth": "1991-11-03",
+    "address": "4515 South Drexel Blvd, Unit 2, Chicago, IL 60653",
+    "phone": "(773) 555-0847",
+    "email": "dpatterson_91@gmail.com",
+    "drivers_license": "IL-DL-P5521874",
+    "credit_tier": "Standard"
+  },
+  "insured_vehicle": {
+    "year": 2022,
+    "make": "BMW",
+    "model": "330i xDrive",
+    "vin": "3MW5R1J05N8B74291",
+    "annual_mileage_estimate": 15000,
+    "garaging_zip": "60653",
+    "lienholder": "BMW Financial Services (lien active)"
+  },
+  "coverage": {
+    "collision": {
+      "covered": true,
+      "per_incident_limit": 10000.0,
+      "deductible": 1000.0
+    },
+    "comprehensive": {
+      "covered": true,
+      "per_incident_limit": 10000.0,
+      "deductible": 500.0
+    },
+    "property_damage_liability": {
+      "covered": true,
+      "per_incident_limit": 25000.0,
+      "deductible": 0
+    },
+    "bodily_injury_liability": {
+      "covered": true,
+      "per_person_limit": 25000.0,
+      "per_incident_limit": 50000.0
+    },
+    "uninsured_motorist": {
+      "covered": false,
+      "per_incident_limit": null
+    },
+    "medical_payments": {
+      "covered": true,
+      "per_person_limit": 2000.0
+    },
+    "rental_reimbursement": {
+      "covered": false,
+      "daily_limit": null,
+      "max_days": null
+    }
+  },
+  "claim_history": {
+    "total_claims_all_time": 3,
+    "claims_last_12_months": 2,
+    "claims_last_24_months": 3,
+    "prior_claims": [
+      {
+        "claim_id": "CLM-2026-00089",
+        "date": "2026-07-02",
+        "type": "Collision \u00e2\u20ac\u201d Side-swipe on expressway",
+        "amount_paid": 3800.0,
+        "fault": "At-fault"
+      },
+      {
+        "claim_id": "CLM-2026-00031",
+        "date": "2026-03-11",
+        "type": "Comprehensive \u00e2\u20ac\u201d Catalytic converter theft",
+        "amount_paid": 2100.0,
+        "fault": "Not-at-fault"
+      },
+      {
+        "claim_id": "CLM-2025-01102",
+        "date": "2025-12-28",
+        "type": "Collision \u00e2\u20ac\u201d Rear-ended another vehicle at stoplight",
+        "amount_paid": 5200.0,
+        "fault": "At-fault"
+      }
+    ]
+  }
+}

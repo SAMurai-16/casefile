@@ -1,0 +1,16 @@
+{
+  "document_type": "First Notice of Loss (FNOL)",
+  "intake_header": {
+    "claim_id": "CLM-2026-10030",
+    "received_at": "2026-09-26T10:05:12Z",
+    "channel": "Local Branch Office Walk-in",
+    "policy_number_provided": "GCO-TX-2025-441928",
+    "insured_contact": {
+      "full_name": "Angela D. Washington",
+      "phone": "(214) 555-0583",
+      "email": "angelaw_dallas@gmail.com",
+      "filing_party": "Policyholder"
+    }
+  },
+  "raw_statement": "Branch Rep Notes: Customer Angela Washington presented at Dallas North branch to report major multi-vehicle accident occurring yesterday, Friday Sept 25, 2026, at 5:45 PM. Insured vehicle: 2021 Nissan Altima SR (red tintcoat, plate TX-HPW-6619, VIN 1N4BL4CV5MN347812, mileage 52,100). Customer's signed statement: 'I was driving westbound down Mockingbird Lane heading toward Greenville Avenue. The late afternoon sun was extremely low and blinding right above the traffic signal. I squinted and thought the light was solid green, so I continued through the intersection at around 30 mph. A blue Chevy Equinox coming south on Greenville T-boned my passenger side with severe impact. My Altima spun completely sideways in the middle of the street. My passenger door curtain/seat airbag exploded with a loud bang and filled the cabin with white smoke. The entire right front door is caved inward and jammed shut, the right fender is crumpled into the tire, the front bumper cover is dragging on the ground, the passenger headlight is gone, and the right front aluminum rim is bent and flat. Other driver: Michael R. Torres, 2024 Chevrolet Equinox RS (TX-LMN-4420, USAA policy US-8827-TX-112). Dallas Police Officer Kendra Williams (Badge #7742) arrived with two squad cars and an ambulance. Officer Williams cited me on the spot for Failure to Obey a Traffic Control Device (Citation / Report # DPD-2026-092548), stating independent traffic camera footage confirmed my light had been red for 4 seconds. Paramedics immobilized Mr. Torres on a backboard with neck and shoulder trauma and transported him via Dallas Fire-Rescue ambulance to Baylor University Medical Center. I have painful red friction burns and bruising across my collarbone from the shoulder harness but refused hospital transport. Car was towed to Caliber Collision.'"
+}

@@ -1,0 +1,77 @@
+{
+  "shop_invoice": {
+    "business": "Pacific Rim Auto Body",
+    "wa_state_ubi": "91-1587042",
+    "address": "1125 Rainier Avenue S, Seattle, WA 98144",
+    "phone": "(206) 555-0763",
+    "estimator": "Tran Pham"
+  },
+  "job_card": {
+    "insurance_claim_num": "CLM-2026-10003",
+    "shop_ticket_id": "EST-2026-09-C0098",
+    "intake_date": "2026-09-23"
+  },
+  "customer_vehicle": {
+    "vin_code": "2T3P1RFV3RW284619",
+    "year_make_model": "2024 Toyota RAV4 XLE",
+    "color_code": "Magnetic Gray (1G3)",
+    "current_miles": 11800,
+    "lic_plate_no": "WA-BNK-3341"
+  },
+  "work_items": [
+    {
+      "task_id": 1,
+      "service_description": "Replace rear bumper cover (Toyota Genuine OEM 52159-42954)",
+      "part_type": "OEM",
+      "parts_cost": 395.0,
+      "body_labor_hrs": 1.5,
+      "paint_labor_hrs": 3.0,
+      "mech_labor_hrs": 0.0
+    },
+    {
+      "task_id": 2,
+      "service_description": "Replace outer left ultrasonic park assist sensor",
+      "part_type": "OEM",
+      "parts_cost": 85.0,
+      "body_labor_hrs": 0.3,
+      "paint_labor_hrs": 0.0,
+      "mech_labor_hrs": 0.0
+    },
+    {
+      "task_id": 3,
+      "service_description": "Bumper mounting retainer clips and fasteners kit",
+      "part_type": "Hardware",
+      "parts_cost": 22.0,
+      "body_labor_hrs": 0.0,
+      "paint_labor_hrs": 0.0,
+      "mech_labor_hrs": 0.0
+    },
+    {
+      "task_id": 4,
+      "service_description": "Park assist sonar sensor functional calibration and diagnostics",
+      "part_type": "In-House Service",
+      "parts_cost": 0.0,
+      "body_labor_hrs": 0.0,
+      "paint_labor_hrs": 0.0,
+      "mech_labor_hrs": 0.5
+    }
+  ],
+  "hourly_rates_applied": {
+    "body_rate": 58.0,
+    "refinish_rate": 64.0,
+    "mechanical_rate": 90.0,
+    "paint_supplies_flat": 110.0
+  },
+  "invoice_totals": {
+    "all_parts_subtotal": 502.0,
+    "body_labor_subtotal": 104.4,
+    "paint_labor_subtotal": 192.0,
+    "paint_materials_flat": 110.0,
+    "mech_labor_subtotal": 45.0,
+    "sublet_subtotal": 0.0,
+    "labor_and_parts_subtotal": 953.4,
+    "wa_state_sales_tax_10_25_pct": 51.46,
+    "final_total_payable": 1004.86
+  },
+  "technician_comments": "Straight replacement of punctured plastic bumper and left reverse sensor. Inner bumper support and liftgate are undamaged."
+}
