@@ -52,9 +52,34 @@ def investigator_node(state: ClaimState) -> dict:
     except Exception:
         tenure_months = 24.0
 
-    # Incident hour
-    fnol_time = state["fnol_raw"].get("intake_header", {}).get("received_at", "")
-    is_late = 1.0 if any(h in fnol_time for h in ["23:", "00:", "01:", "02:", "03:", "04:"]) or "11:42 pm" in fnol_str.lower() or "03:30 am" in fnol_str.lower() else 0.0
+    # Incident hour (Late-night window: 11:00 PM - 4:59 AM)
+    incident_time_raw = extraction.incident_time if (extraction and extraction.incident_time) else state["fnol_raw"].get("intake_header", {}).get("received_at", "")
+    
+    def _parse_is_late_night(time_str: str, text: str) -> float:
+        import re
+        candidates = [time_str] if time_str else []
+        if not candidates and text:
+            m = re.search(r'\b(\d{1,2}:\d{2}(?::\d{2})?\s*(?:am|pm)?)\b', text, re.IGNORECASE)
+            if m:
+                candidates.append(m.group(1))
+        for cand in candidates:
+            s = cand.strip().lower()
+            ampm = re.search(r'(\d{1,2}):(\d{2})\s*(am|pm)', s)
+            if ampm:
+                hr = int(ampm.group(1))
+                mer = ampm.group(3)
+                if mer == "pm" and hr != 12:
+                    hr += 12
+                elif mer == "am" and hr == 12:
+                    hr = 0
+                return 1.0 if (hr >= 23 or hr < 5) else 0.0
+            mil = re.search(r'(?:t|\b)(\d{1,2}):(\d{2})', s)
+            if mil:
+                hr = int(mil.group(1))
+                return 1.0 if (hr >= 23 or hr < 5) else 0.0
+        return 0.0
+
+    is_late = _parse_is_late_night(incident_time_raw, fnol_str)
     
     is_single = 1.0 if not extraction or not extraction.other_party_involved else 0.0
     has_police = 1.0 if extraction and extraction.police_report_filed else 0.0
