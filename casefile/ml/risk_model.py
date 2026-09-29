@@ -9,7 +9,7 @@ class FraudRiskAssessment(BaseModel):
     fraud_risk_level: str = Field(description="Tier: low (0-29), medium (30-69), high (70-84), critical (85-100)")
     is_total_loss_candidate: bool = Field(description="True if repair cost is >= 75% of vehicle ACV")
     repair_to_acv_ratio: float = Field(description="Repair cost divided by pre-accident vehicle market value")
-    siu_referral_recommended: bool = Field(description="True if score >= 75 or critical total loss fraud pattern")
+    siu_referral_recommended: bool = Field(description="True if score >= 80 or critical total loss fraud pattern")
     top_risk_factors: List[Dict[str, Any]] = Field(
         default_factory=list,
         description="Feature contribution explanations (SHAP-style feature impacts)"
@@ -121,7 +121,7 @@ class ClaimsRiskModel:
 
         acv_ratio = features.get("repair_to_acv_ratio", 0.0)
         is_total_loss = acv_ratio >= 0.75
-        siu_recommended = score >= 75 or (is_total_loss and features.get("is_single_vehicle", 0) == 1)
+        siu_recommended = score >= 80 or (is_total_loss and features.get("is_single_vehicle", 0) == 1)
 
         # Calculate feature contributions (SHAP-style)
         contributions = []

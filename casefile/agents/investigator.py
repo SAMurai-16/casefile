@@ -1,4 +1,5 @@
 import json
+import re
 from datetime import datetime, timezone
 from ..schema import ClaimState, InvestigationResult, HandoffPayload
 from ..tracing.cost_tracker import calculate_call_cost
@@ -6,38 +7,55 @@ from ..store.valuation_service import ValuationService
 from ..ml.risk_model import ClaimsRiskModel
 from .llm_factory import LLMFactory
 
+
+def _parse_is_late_night(time_str: str, text: str) -> float:
+    candidates = [time_str] if time_str else []
+    if not candidates and text:
+        m = re.search(r'\b(\d{1,2}:\d{2}(?::\d{2})?\s*(?:am|pm)?)\b', text, re.IGNORECASE)
+        if m:
+            candidates.append(m.group(1))
+    for cand in candidates:
+        s = cand.strip().lower()
+        ampm = re.search(r'(\d{1,2}):(\d{2})\s*(am|pm)', s)
+        if ampm:
+            hr = int(ampm.group(1))
+            mer = ampm.group(3)
+            if mer == "pm" and hr != 12:
+                hr += 12
+            elif mer == "am" and hr == 12:
+                hr = 0
+            return 1.0 if (hr >= 23 or hr < 5) else 0.0
+        mil = re.search(r'(?:t|\b)(\d{1,2}):(\d{2})', s)
+        if mil:
+            hr = int(mil.group(1))
+            return 1.0 if (hr >= 23 or hr < 5) else 0.0
+    return 0.0
+
+
 def investigator_node(state: ClaimState) -> dict:
     """
     Investigator Agent:
-    1. Computes pre-accident Actual Cash Value (ACV) and repair-to-ACV ratio via ValuationService.
-    2. Runs LightGBM ML risk model to calculate calibrated fraud score & SHAP factor contributions.
-    3. Evaluates all policy coverage lines (Collision, Rental, MedPay, Liability).
+    1. Reads structured Extraction findings and raw Policy contract.
+    2. Computes pre-accident Actual Cash Value (ACV) and repair-to-ACV ratio via ValuationService.
+    3. Runs LightGBM ML risk model to calculate calibrated fraud score & SHAP factor contributions.
+    4. Evaluates all policy coverage lines (Collision, Rental, MedPay, Liability).
     """
-    policy_str = json.dumps(state["policy_raw"], indent=2)
-    fnol_str = json.dumps(state["fnol_raw"], indent=2)
-    
     extraction = state.get("extraction")
-    
+    if not extraction:
+        raise ValueError("Investigator requires extraction to be completed before running.")
+
+    policy_str = json.dumps(state["policy_raw"], indent=2)
+
     # 1. Deterministic Vehicle Valuation (CCC ONE / KBB proxy)
     val_svc = ValuationService()
-    if extraction:
-        valuation = val_svc.evaluate_claim_repair(
-            repair_cost=extraction.claimed_grand_total,
-            year=extraction.vehicle_year,
-            make=extraction.vehicle_make,
-            model=extraction.vehicle_model,
-            mileage=extraction.vehicle_mileage or 35000,
-            vin=extraction.vehicle_vin
-        )
-    else:
-        veh_info = state["fnol_raw"].get("vehicle_info", {})
-        valuation = val_svc.evaluate_claim_repair(
-            repair_cost=0.0,
-            year=veh_info.get("year", 2022),
-            make=veh_info.get("make", "Generic"),
-            model=veh_info.get("model", "Sedan"),
-            mileage=veh_info.get("mileage_at_incident", 35000)
-        )
+    valuation = val_svc.evaluate_claim_repair(
+        repair_cost=extraction.claimed_grand_total,
+        year=extraction.vehicle_year,
+        make=extraction.vehicle_make,
+        model=extraction.vehicle_model,
+        mileage=extraction.vehicle_mileage or 35000,
+        vin=extraction.vehicle_vin
+    )
 
     # 2. Extract Features for LightGBM Risk Model
     pol_data = state["policy_raw"].get("policy", {})
@@ -53,36 +71,11 @@ def investigator_node(state: ClaimState) -> dict:
         tenure_months = 24.0
 
     # Incident hour (Late-night window: 11:00 PM - 4:59 AM)
-    incident_time_raw = extraction.incident_time if (extraction and extraction.incident_time) else state["fnol_raw"].get("intake_header", {}).get("received_at", "")
+    incident_time_raw = extraction.incident_time or ""
+    is_late = _parse_is_late_night(incident_time_raw, extraction.incident_summary)
     
-    def _parse_is_late_night(time_str: str, text: str) -> float:
-        import re
-        candidates = [time_str] if time_str else []
-        if not candidates and text:
-            m = re.search(r'\b(\d{1,2}:\d{2}(?::\d{2})?\s*(?:am|pm)?)\b', text, re.IGNORECASE)
-            if m:
-                candidates.append(m.group(1))
-        for cand in candidates:
-            s = cand.strip().lower()
-            ampm = re.search(r'(\d{1,2}):(\d{2})\s*(am|pm)', s)
-            if ampm:
-                hr = int(ampm.group(1))
-                mer = ampm.group(3)
-                if mer == "pm" and hr != 12:
-                    hr += 12
-                elif mer == "am" and hr == 12:
-                    hr = 0
-                return 1.0 if (hr >= 23 or hr < 5) else 0.0
-            mil = re.search(r'(?:t|\b)(\d{1,2}):(\d{2})', s)
-            if mil:
-                hr = int(mil.group(1))
-                return 1.0 if (hr >= 23 or hr < 5) else 0.0
-        return 0.0
-
-    is_late = _parse_is_late_night(incident_time_raw, fnol_str)
-    
-    is_single = 1.0 if not extraction or not extraction.other_party_involved else 0.0
-    has_police = 1.0 if extraction and extraction.police_report_filed else 0.0
+    is_single = 1.0 if not extraction.other_party_involved else 0.0
+    has_police = 1.0 if extraction.police_report_filed else 0.0
     clm_24 = float(claim_hist.get("claims_last_24_months", 0))
     clm_12 = float(claim_hist.get("claims_last_12_months", 0))
 
@@ -103,7 +96,38 @@ def investigator_node(state: ClaimState) -> dict:
     risk_engine = ClaimsRiskModel()
     ml_risk = risk_engine.predict_risk(ml_features)
 
+    # Build auxiliary claims summary for prompt
+    aux_lines = []
+    if extraction.rental_receipt:
+        rr = extraction.rental_receipt
+        aux_lines.append(f"- Rental Car Invoice: {rr.rental_agency}, {rr.days_billed} days @ ${rr.daily_rate:.2f}/day (Total Billed: ${rr.total_charged:,.2f})")
+    if extraction.medical_bills:
+        med_total = sum(b.total_billed for b in extraction.medical_bills)
+        providers = ", ".join(set(b.provider_name for b in extraction.medical_bills))
+        aux_lines.append(f"- Medical Payments Claim: {len(extraction.medical_bills)} bill(s) totaling ${med_total:,.2f} (Provider(s): {providers})")
+    if extraction.third_party_claim:
+        tp = extraction.third_party_claim
+        aux_lines.append(f"- Third-Party Subrogation Demand: Claimant {tp.claimant_name}, Property Damage: ${tp.property_damage_claimed:,.2f}, Bodily Injury: ${tp.bodily_injury_claimed:,.2f} (Summary: {tp.demand_summary})")
+    
+    auxiliary_claims_summary = "\n".join(aux_lines) if aux_lines else "- No auxiliary rental, medical, or third-party expenses claimed."
+
+    police_info = f"Filed ({extraction.police_report_number or 'Report on file'})" if extraction.police_report_filed else "None filed"
+    other_party_info = f"Yes - {extraction.other_party_details or 'Third party involved'}" if extraction.other_party_involved else "No (Single-vehicle incident)"
+
     extraction_summary = f"""
+=== CLAIM & LOSS CIRCUMSTANCES (STRUCTURED EXTRACTION) ===
+- Claim ID: {extraction.claim_id}
+- Incident Date & Time: {extraction.incident_date} {extraction.incident_time or ''}
+- Location: {extraction.incident_location}
+- Accident Description: {extraction.incident_summary}
+- Damaged Vehicle: {extraction.vehicle_year} {extraction.vehicle_make} {extraction.vehicle_model} (VIN: {extraction.vehicle_vin})
+- Drivable: {extraction.is_drivable}
+- Police Report: {police_info}
+- Other Party Involved: {other_party_info}
+- Claimed Body Shop Repair Cost: ${extraction.claimed_grand_total:,.2f} (Facility: {extraction.repair_facility_name})
+=== AUXILIARY EXPENSES CLAIMED ===
+{auxiliary_claims_summary}
+
 === VEHICLE VALUATION & TOTAL LOSS AUDIT ===
 - Pre-Accident Market ACV: ${valuation.actual_cash_value:,.2f}
 - Claimed Repair Cost: ${valuation.repair_estimate_total:,.2f}
@@ -119,13 +143,10 @@ def investigator_node(state: ClaimState) -> dict:
 
     prompt = f"""
 You are the Insurance Coverage Investigator Agent.
-Examine the customer's Policy Record, loss circumstances, and the automated vehicle valuation / LightGBM risk findings.
+Examine the customer's Policy Record, structured loss circumstances, and the automated vehicle valuation / LightGBM risk findings.
 
-=== DOCUMENT 3: POLICY & COVERAGE RECORD ===
+=== DOCUMENT: POLICY & COVERAGE RECORD ===
 {policy_str}
-
-=== LOSS CIRCUMSTANCES (FROM FNOL) ===
-{fnol_str}
 {extraction_summary}
 
 Adjudication Tasks:
