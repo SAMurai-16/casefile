@@ -1,0 +1,179 @@
+{
+  "claim_id": "CLM-2026-10001",
+  "run_id": "1ac64fd0",
+  "start_time": "2026-09-29T16:10:18.428907",
+  "end_time": "2026-09-29T16:10:18.489578",
+  "node_path": [
+    "supervisor",
+    "extractor",
+    "supervisor",
+    "investigator",
+    "supervisor",
+    "reviewer",
+    "supervisor",
+    "human_gate",
+    "terminate"
+  ],
+  "total_steps": 8,
+  "rework_count": 0,
+  "total_tokens": 5380,
+  "total_cost_usd": 0.0009220000000000001,
+  "terminal_status": "approved",
+  "final_payout_amount": 4233.79,
+  "events": [
+    {
+      "event": "node_entry",
+      "node": "supervisor",
+      "step": 1,
+      "tokens": 0,
+      "cost_usd": 0.0,
+      "timestamp": "2026-09-29T16:10:18.433466"
+    },
+    {
+      "event": "node_entry",
+      "node": "extractor",
+      "step": 2,
+      "tokens": 1850,
+      "cost_usd": 0.00032,
+      "timestamp": "2026-09-29T16:10:18.436348"
+    },
+    {
+      "event": "node_entry",
+      "node": "supervisor",
+      "step": 3,
+      "tokens": 0,
+      "cost_usd": 0.0,
+      "timestamp": "2026-09-29T16:10:18.436968"
+    },
+    {
+      "event": "node_entry",
+      "node": "investigator",
+      "step": 4,
+      "tokens": 3830,
+      "cost_usd": 0.000662,
+      "timestamp": "2026-09-29T16:10:18.474372"
+    },
+    {
+      "event": "node_entry",
+      "node": "supervisor",
+      "step": 5,
+      "tokens": 0,
+      "cost_usd": 0.0,
+      "timestamp": "2026-09-29T16:10:18.478294"
+    },
+    {
+      "event": "node_entry",
+      "node": "reviewer",
+      "step": 6,
+      "tokens": 5380,
+      "cost_usd": 0.0009220000000000001,
+      "timestamp": "2026-09-29T16:10:18.478956"
+    },
+    {
+      "event": "node_entry",
+      "node": "supervisor",
+      "step": 7,
+      "tokens": 0,
+      "cost_usd": 0.0,
+      "timestamp": "2026-09-29T16:10:18.482256"
+    },
+    {
+      "event": "node_entry",
+      "node": "human_gate",
+      "step": 8,
+      "tokens": 0,
+      "cost_usd": 0.0,
+      "timestamp": "2026-09-29T16:10:18.487472"
+    },
+    {
+      "event": "node_entry",
+      "node": "terminate",
+      "step": 0,
+      "tokens": 0,
+      "cost_usd": 0.0,
+      "timestamp": "2026-09-29T16:10:18.488729"
+    }
+  ],
+  "handoff_history": [
+    {
+      "source_node": "supervisor",
+      "target_node": "extractor",
+      "action": "EXTRACT",
+      "claim_id": "CLM-2026-10001",
+      "step_number": 1,
+      "timestamp": "2026-09-29T16:10:18.432715",
+      "metadata": {},
+      "summary": "Dispatching raw claim documents to Extractor Agent."
+    },
+    {
+      "source_node": "extractor",
+      "target_node": "supervisor",
+      "action": "EXTRACT",
+      "claim_id": "CLM-2026-10001",
+      "step_number": 2,
+      "timestamp": "2026-09-29T16:10:18.434176+00:00",
+      "metadata": {},
+      "summary": "Extracted claim details: Repair total $4,017.79 from Lone Star Collision Center (+ Rental: 8d @ $42.0/d, Medical: 1 bill(s))"
+    },
+    {
+      "source_node": "supervisor",
+      "target_node": "investigator",
+      "action": "INVESTIGATE",
+      "claim_id": "CLM-2026-10001",
+      "step_number": 3,
+      "timestamp": "2026-09-29T16:10:18.436474",
+      "metadata": {},
+      "summary": "Dispatching policy record and loss context to Investigator Agent."
+    },
+    {
+      "source_node": "investigator",
+      "target_node": "supervisor",
+      "action": "INVESTIGATE",
+      "claim_id": "CLM-2026-10001",
+      "step_number": 4,
+      "timestamp": "2026-09-29T16:10:18.473760+00:00",
+      "metadata": {},
+      "summary": "Coverage verdict: COVERED (Collision: $24,500.00, Rental: $336.00, MedPay: $380.00) [LightGBM Risk: LOW 11/100]"
+    },
+    {
+      "source_node": "supervisor",
+      "target_node": "reviewer",
+      "action": "REVIEW",
+      "claim_id": "CLM-2026-10001",
+      "step_number": 5,
+      "timestamp": "2026-09-29T16:10:18.474493",
+      "metadata": {},
+      "summary": "Dispatching normalized evidence to Reviewer Agent for cross-check."
+    },
+    {
+      "source_node": "reviewer",
+      "target_node": "supervisor",
+      "action": "APPROVE",
+      "claim_id": "CLM-2026-10001",
+      "step_number": 6,
+      "timestamp": "2026-09-29T16:10:18.478538+00:00",
+      "metadata": {},
+      "summary": "Recommendation: APPROVE | Authorized: $4,233.79 [vehicle_repair: $3,517.79, rental_car: $336.00, medical_payments: $380.00]"
+    },
+    {
+      "source_node": "supervisor",
+      "target_node": "human_gate",
+      "action": "APPROVE",
+      "claim_id": "CLM-2026-10001",
+      "step_number": 7,
+      "timestamp": "2026-09-29T16:10:18.480511",
+      "metadata": {},
+      "summary": "Payout recommendation requires human authorization ($4,233.79)."
+    },
+    {
+      "source_node": "human_gate",
+      "target_node": "terminate",
+      "action": "HUMAN_APPROVE",
+      "claim_id": "CLM-2026-10001",
+      "step_number": 8,
+      "timestamp": "2026-09-29T16:10:18.486625+00:00",
+      "metadata": {},
+      "summary": "Human adjuster senior_adjuster_auto APPROVED multi-line payout of $4,233.79"
+    }
+  ]
+}

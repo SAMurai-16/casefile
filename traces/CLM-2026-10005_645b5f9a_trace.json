@@ -1,0 +1,122 @@
+{
+  "claim_id": "CLM-2026-10005",
+  "run_id": "645b5f9a",
+  "start_time": "2026-09-29T11:06:31.577300",
+  "end_time": "2026-09-29T11:06:31.598097",
+  "node_path": [
+    "supervisor",
+    "extractor",
+    "supervisor",
+    "investigator",
+    "supervisor",
+    "terminate"
+  ],
+  "total_steps": 5,
+  "rework_count": 0,
+  "total_tokens": 3600,
+  "total_cost_usd": 0.00063,
+  "terminal_status": "denied",
+  "final_payout_amount": 0.0,
+  "events": [
+    {
+      "event": "node_entry",
+      "node": "supervisor",
+      "step": 1,
+      "tokens": 0,
+      "cost_usd": 0.0,
+      "timestamp": "2026-09-29T11:06:31.581569"
+    },
+    {
+      "event": "node_entry",
+      "node": "extractor",
+      "step": 2,
+      "tokens": 1850,
+      "cost_usd": 0.00032,
+      "timestamp": "2026-09-29T11:06:31.583183"
+    },
+    {
+      "event": "node_entry",
+      "node": "supervisor",
+      "step": 3,
+      "tokens": 0,
+      "cost_usd": 0.0,
+      "timestamp": "2026-09-29T11:06:31.584406"
+    },
+    {
+      "event": "node_entry",
+      "node": "investigator",
+      "step": 4,
+      "tokens": 3600,
+      "cost_usd": 0.00063,
+      "timestamp": "2026-09-29T11:06:31.585032"
+    },
+    {
+      "event": "node_entry",
+      "node": "supervisor",
+      "step": 5,
+      "tokens": 0,
+      "cost_usd": 0.0,
+      "timestamp": "2026-09-29T11:06:31.586476"
+    },
+    {
+      "event": "node_entry",
+      "node": "terminate",
+      "step": 0,
+      "tokens": 0,
+      "cost_usd": 0.0,
+      "timestamp": "2026-09-29T11:06:31.588092"
+    }
+  ],
+  "handoff_history": [
+    {
+      "source_node": "supervisor",
+      "target_node": "extractor",
+      "action": "EXTRACT",
+      "claim_id": "CLM-2026-10005",
+      "step_number": 1,
+      "timestamp": "2026-09-29T11:06:31.580994",
+      "metadata": {},
+      "summary": "Dispatching raw claim documents to Extractor Agent."
+    },
+    {
+      "source_node": "extractor",
+      "target_node": "supervisor",
+      "action": "EXTRACT",
+      "claim_id": "CLM-2026-10005",
+      "step_number": 2,
+      "timestamp": "2026-09-29T11:06:31.582116+00:00",
+      "metadata": {},
+      "summary": "Extracted claim details: Repair total $7,878.00 from Caliber Collision \u2014 Dallas Greenville (+ Third-Party: $7,300.00)"
+    },
+    {
+      "source_node": "supervisor",
+      "target_node": "investigator",
+      "action": "INVESTIGATE",
+      "claim_id": "CLM-2026-10005",
+      "step_number": 3,
+      "timestamp": "2026-09-29T11:06:31.583252",
+      "metadata": {},
+      "summary": "Dispatching policy record and loss context to Investigator Agent."
+    },
+    {
+      "source_node": "investigator",
+      "target_node": "supervisor",
+      "action": "INVESTIGATE",
+      "claim_id": "CLM-2026-10005",
+      "step_number": 4,
+      "timestamp": "2026-09-29T11:06:31.584662+00:00",
+      "metadata": {},
+      "summary": "Coverage verdict: NOT_COVERED (Collision: $0.00, LIABILITY EXPOSURE FLAGGED) [Fraud Risk: LOW 20/100]"
+    },
+    {
+      "source_node": "supervisor",
+      "target_node": "terminate",
+      "action": "DENY",
+      "claim_id": "CLM-2026-10005",
+      "step_number": 5,
+      "timestamp": "2026-09-29T11:06:31.585099",
+      "metadata": {},
+      "summary": "Fast-path denial: Policy inactive at date of loss."
+    }
+  ]
+}

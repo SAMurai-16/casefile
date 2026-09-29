@@ -1,0 +1,179 @@
+{
+  "claim_id": "CLM-2026-10022",
+  "run_id": "48815e2f",
+  "start_time": "2026-09-28T06:20:05.523377",
+  "end_time": "2026-09-28T06:20:05.533142",
+  "node_path": [
+    "supervisor",
+    "extractor",
+    "supervisor",
+    "investigator",
+    "supervisor",
+    "reviewer",
+    "supervisor",
+    "human_gate",
+    "terminate"
+  ],
+  "total_steps": 8,
+  "rework_count": 0,
+  "total_tokens": 4350,
+  "total_cost_usd": 0.00075,
+  "terminal_status": "approved",
+  "final_payout_amount": 9000.0,
+  "events": [
+    {
+      "event": "node_entry",
+      "node": "supervisor",
+      "step": 1,
+      "tokens": 0,
+      "cost_usd": 0.0,
+      "timestamp": "2026-09-28T06:20:05.525535"
+    },
+    {
+      "event": "node_entry",
+      "node": "extractor",
+      "step": 2,
+      "tokens": 1600,
+      "cost_usd": 0.00028,
+      "timestamp": "2026-09-28T06:20:05.526267"
+    },
+    {
+      "event": "node_entry",
+      "node": "supervisor",
+      "step": 3,
+      "tokens": 0,
+      "cost_usd": 0.0,
+      "timestamp": "2026-09-28T06:20:05.526993"
+    },
+    {
+      "event": "node_entry",
+      "node": "investigator",
+      "step": 4,
+      "tokens": 3050,
+      "cost_usd": 0.00053,
+      "timestamp": "2026-09-28T06:20:05.527729"
+    },
+    {
+      "event": "node_entry",
+      "node": "supervisor",
+      "step": 5,
+      "tokens": 0,
+      "cost_usd": 0.0,
+      "timestamp": "2026-09-28T06:20:05.528763"
+    },
+    {
+      "event": "node_entry",
+      "node": "reviewer",
+      "step": 6,
+      "tokens": 4350,
+      "cost_usd": 0.00075,
+      "timestamp": "2026-09-28T06:20:05.529394"
+    },
+    {
+      "event": "node_entry",
+      "node": "supervisor",
+      "step": 7,
+      "tokens": 0,
+      "cost_usd": 0.0,
+      "timestamp": "2026-09-28T06:20:05.530109"
+    },
+    {
+      "event": "node_entry",
+      "node": "human_gate",
+      "step": 8,
+      "tokens": 0,
+      "cost_usd": 0.0,
+      "timestamp": "2026-09-28T06:20:05.532434"
+    },
+    {
+      "event": "node_entry",
+      "node": "terminate",
+      "step": 0,
+      "tokens": 0,
+      "cost_usd": 0.0,
+      "timestamp": "2026-09-28T06:20:05.532874"
+    }
+  ],
+  "handoff_history": [
+    {
+      "source_node": "supervisor",
+      "target_node": "extractor",
+      "action": "EXTRACT",
+      "claim_id": "CLM-2026-10022",
+      "step_number": 1,
+      "timestamp": "2026-09-28T06:20:05.524933",
+      "metadata": {},
+      "summary": "Dispatching raw claim documents to Extractor Agent."
+    },
+    {
+      "source_node": "extractor",
+      "target_node": "supervisor",
+      "action": "EXTRACT",
+      "claim_id": "CLM-2026-10022",
+      "step_number": 2,
+      "timestamp": "2026-09-28T06:20:05.525750",
+      "metadata": {},
+      "summary": "Extracted claim details: Grand total $12,590.70 from Prestige Auto Body & Paint"
+    },
+    {
+      "source_node": "supervisor",
+      "target_node": "investigator",
+      "action": "INVESTIGATE",
+      "claim_id": "CLM-2026-10022",
+      "step_number": 3,
+      "timestamp": "2026-09-28T06:20:05.526367",
+      "metadata": {},
+      "summary": "Dispatching policy record and loss context to Investigator Agent."
+    },
+    {
+      "source_node": "investigator",
+      "target_node": "supervisor",
+      "action": "INVESTIGATE",
+      "claim_id": "CLM-2026-10022",
+      "step_number": 4,
+      "timestamp": "2026-09-28T06:20:05.527279",
+      "metadata": {},
+      "summary": "Coverage verdict: PARTIAL_COVERAGE (Fraud Risk: HIGH, Score: 75/100)"
+    },
+    {
+      "source_node": "supervisor",
+      "target_node": "reviewer",
+      "action": "REVIEW",
+      "claim_id": "CLM-2026-10022",
+      "step_number": 5,
+      "timestamp": "2026-09-28T06:20:05.527840",
+      "metadata": {},
+      "summary": "Dispatching normalized evidence to Reviewer Agent for cross-check."
+    },
+    {
+      "source_node": "reviewer",
+      "target_node": "supervisor",
+      "action": "PARTIAL_APPROVE",
+      "claim_id": "CLM-2026-10022",
+      "step_number": 6,
+      "timestamp": "2026-09-28T06:20:05.528853",
+      "metadata": {},
+      "summary": "Recommendation: PARTIAL_APPROVE (Proposed Payout: $9,000.00)"
+    },
+    {
+      "source_node": "supervisor",
+      "target_node": "human_gate",
+      "action": "PARTIAL_APPROVE",
+      "claim_id": "CLM-2026-10022",
+      "step_number": 7,
+      "timestamp": "2026-09-28T06:20:05.529442",
+      "metadata": {},
+      "summary": "Payout recommendation requires human authorization ($9,000.00)."
+    },
+    {
+      "source_node": "human_gate",
+      "target_node": "terminate",
+      "action": "HUMAN_APPROVE",
+      "claim_id": "CLM-2026-10022",
+      "step_number": 8,
+      "timestamp": "2026-09-28T06:20:05.531925",
+      "metadata": {},
+      "summary": "Human adjuster senior_adjuster_auto APPROVED payout of $9,000.00"
+    }
+  ]
+}
