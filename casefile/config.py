@@ -2,10 +2,12 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-load_dotenv()
-
 # Base directories
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load .env from project root and current working directory
+load_dotenv(BASE_DIR / ".env")
+load_dotenv()
 DATA_DIR = Path(os.getenv("CASEFILE_DATA_DIR", BASE_DIR / "data" / "claims"))
 CHECKPOINT_DIR = Path(os.getenv("CASEFILE_CHECKPOINT_DIR", BASE_DIR / ".checkpoints"))
 TRACES_DIR = Path(os.getenv("CASEFILE_TRACES_DIR", BASE_DIR / "traces"))
