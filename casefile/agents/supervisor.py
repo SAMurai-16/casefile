@@ -139,9 +139,10 @@ def supervisor_node(state: ClaimState) -> dict:
             )
             # Reset the appropriate downstream result for fresh pass
             reset_fields = {"extraction": None, "review": None} if target == "extractor" else {"investigation": None, "review": None}
+            target_phase = "extraction" if target == "extractor" else "investigation"
             return {
                 **reset_fields,
-                "current_phase": target,
+                "current_phase": target_phase,
                 "rework_count": state["rework_count"] + 1,
                 "step_count": step,
                 "handoff_history": state["handoff_history"] + [handoff]

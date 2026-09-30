@@ -16,13 +16,13 @@ def terminate_node(state: ClaimState) -> dict:
 def route_from_supervisor(state: ClaimState) -> Literal["extractor", "investigator", "reviewer", "human_gate", "terminate"]:
     """Deterministic routing function based on state phase."""
     phase = state.get("current_phase", "terminated")
-    if phase == "extraction":
+    if phase in ("extraction", "extractor"):
         return "extractor"
-    elif phase == "investigation":
+    elif phase in ("investigation", "investigator"):
         return "investigator"
-    elif phase == "review":
+    elif phase in ("review", "reviewer"):
         return "reviewer"
-    elif phase == "human_gate":
+    elif phase in ("human_gate", "human"):
         return "human_gate"
     else:
         return "terminate"

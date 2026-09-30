@@ -250,7 +250,8 @@ Review Tasks:
 3. Settlement Recommendation:
    - If Policy is Lapsed/Cancelled: recommend "deny".
    - If SIU Referral is Recommended or Fraud is Critical: recommend "escalate_siu".
-   - If unresolvable ambiguity between damage and narrative exists (and rework < 2): recommend "rework" with target and instructions.
+   - If unresolvable factual contradiction exists between driver narrative and damage areas (e.g. impact described on rear bumper, but estimate bills front suspension, and rework < 2): recommend "rework" with target and instructions.
+     NOTE: Do NOT request rework for shop arithmetic discrepancies or auxiliary limit caps; those are already audited and presented to the human adjuster in discrepancy_details.
    - If repair cost exceeds policy collision limit: recommend "partial_approve".
    - Otherwise: recommend "approve".
 4. Adjuster Briefing:
