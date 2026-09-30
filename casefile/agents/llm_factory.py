@@ -544,7 +544,7 @@ class ResilientStructuredLLM:
         except Exception as e:
             err_name = e.__class__.__name__
             err_msg = str(e).lower()
-            if any(k in err_msg for k in ["429", "503", "quota", "resource_exhausted", "unavailable", "rate"]):
+            if any(k in err_msg for k in ["429", "503", "504", "deadline", "timeout", "quota", "resource_exhausted", "unavailable", "rate"]):
                 print(f"  [API Notice: {err_name}] Live provider unavailable; seamlessly utilizing deterministic fallback.")
                 return self.fallback_llm.invoke(prompt)
             raise
