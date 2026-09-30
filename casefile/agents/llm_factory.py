@@ -537,23 +537,6 @@ class MockStructuredLLM:
                     justification="Claim denied: Policy cancelled for non-payment 72 days prior to loss. Zero coverage in effect."
                 )
 
-class ResilientStructuredLLM:
-    """Wraps live LLM with graceful fallback to deterministic mock on 429/503 quota limits."""
-    def __init__(self, primary_llm: Any, fallback_llm: Any):
-        self.primary_llm = primary_llm
-        self.fallback_llm = fallback_llm
-
-    def invoke(self, prompt: str) -> Any:
-        try:
-            return self.primary_llm.invoke(prompt)
-        except Exception as e:
-            err_name = e.__class__.__name__
-            err_msg = str(e).lower()
-            if any(k in err_msg for k in ["429", "503", "504", "deadline", "timeout", "quota", "resource_exhausted", "unavailable", "rate"]):
-                print(f"  [API Notice: {err_name} ({e})] Live provider unavailable; seamlessly utilizing deterministic fallback.")
-                return self.fallback_llm.invoke(prompt)
-            raise
-
 class LLMFactory:
     """Provides structured-output LLM instances based on configured provider."""
     @staticmethod
@@ -567,32 +550,30 @@ class LLMFactory:
         elif provider == "gemini":
             api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
             if not api_key:
-                return MockStructuredLLM(output_schema)
+                raise ValueError("GEMINI_API_KEY or GOOGLE_API_KEY environment variable is required when LLM_PROVIDER='gemini'.")
             from langchain_google_genai import ChatGoogleGenerativeAI
+            clean_model = model_name.strip() if model_name else "gemini-2.5-flash"
             llm = ChatGoogleGenerativeAI(
-                model=model_name if "gemini" in model_name else "gemini-flash-latest",
+                model=clean_model,
                 temperature=0.0,
                 google_api_key=api_key,
                 max_retries=1,
                 timeout=60.0,
             )
-            primary = llm.with_structured_output(output_schema)
-            fallback = MockStructuredLLM(output_schema)
-            return ResilientStructuredLLM(primary, fallback)
+            return llm.with_structured_output(output_schema)
 
         elif provider == "openai":
             api_key = os.getenv("OPENAI_API_KEY")
             if not api_key:
-                return MockStructuredLLM(output_schema)
+                raise ValueError("OPENAI_API_KEY environment variable is required when LLM_PROVIDER='openai'.")
             from langchain_openai import ChatOpenAI
+            clean_model = model_name.strip() if model_name else "gpt-4o-mini"
             llm = ChatOpenAI(
-                model=model_name if "gpt" in model_name else "gpt-4o-mini",
+                model=clean_model,
                 temperature=0.0,
                 api_key=api_key,
             )
-            primary = llm.with_structured_output(output_schema)
-            fallback = MockStructuredLLM(output_schema)
-            return ResilientStructuredLLM(primary, fallback)
+            return llm.with_structured_output(output_schema)
 
         else:
-            return MockStructuredLLM(output_schema)
+            raise ValueError(f"Unknown LLM_PROVIDER: '{provider}'. Supported values are 'gemini', 'openai', or 'mock'.")
