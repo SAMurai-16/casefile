@@ -124,7 +124,7 @@ def investigator_node(state: ClaimState) -> dict:
     1. DETERMINISTIC STEP 1: Computes pre-accident Actual Cash Value (ACV) and repair-to-ACV ratio via ValuationService.
     2. DETERMINISTIC STEP 2: Evaluates 10 actuarial features through LightGBM risk model for calibrated fraud score & SHAP factor contributions.
     3. DETERMINISTIC STEP 3: Computes multi-line policy limits, deductibles, and eligible payouts via pure arithmetic (min(billed, limit) - deductible).
-    4. QUALITATIVE STEP 4: LLM audits policy contract clauses, endorsement riders, exclusions, and third-party liability exposure.
+    4. QUALITATIVE STEP 4: LLM audits policy contract clauses, endorsement riders, exclusions, and third-party liability exposure with case-specific facts.
     """
     extraction = state.get("extraction")
     if not extraction:
@@ -203,6 +203,43 @@ def investigator_node(state: ClaimState) -> dict:
         for c in clauses
     ) if clauses else "- Standard personal auto policy terms."
 
+    # Build repair parts and charges breakdown for evidence-based contract audit
+    parts_items = [it for it in (extraction.itemized_repairs or []) if it.category == "parts"]
+    oem_parts = [it for it in parts_items if (it.part_type or "").upper() == "OEM"]
+    non_oem_parts = [it for it in parts_items if (it.part_type or "").upper() != "OEM"]
+    towing_items = [it for it in (extraction.itemized_repairs or []) if it.category == "towing_storage"]
+
+    parts_summary_lines = []
+    if parts_items:
+        parts_summary_lines.append(f"- Total Parts Billed: {len(parts_items)} items totaling ${sum(p.amount for p in parts_items):,.2f}")
+        if oem_parts:
+            oem_total = sum(p.amount for p in oem_parts)
+            oem_sample = ", ".join(p.description for p in oem_parts[:4])
+            parts_summary_lines.append(f"  • OEM Parts Billed: {len(oem_parts)} items totaling ${oem_total:,.2f} (Includes: {oem_sample})")
+        if non_oem_parts:
+            non_oem_total = sum(p.amount for p in non_oem_parts)
+            non_oem_sample = ", ".join(p.description for p in non_oem_parts[:4])
+            parts_summary_lines.append(f"  • Non-OEM/LKQ/Aftermarket Parts Billed: {len(non_oem_parts)} items totaling ${non_oem_total:,.2f} (Includes: {non_oem_sample})")
+    else:
+        parts_summary_lines.append(f"- Total Parts Billed: ${extraction.total_parts_cost:,.2f} (Itemized breakdown not available)")
+
+    # Flag custom equipment or wheel items
+    custom_items = [
+        it for it in (extraction.itemized_repairs or [])
+        if any(k in it.description.lower() for k in ["wheel", "rim", "alloy", "custom", "audio", "wrap", "spoiler", "m-sport"])
+    ]
+    if custom_items:
+        for ci in custom_items:
+            parts_summary_lines.append(f"  • Custom/Aftermarket Item Flagged: '{ci.description}' billed at ${ci.amount:,.2f} ({ci.part_type or 'Part'})")
+
+    if towing_items:
+        towing_total = sum(t.amount for t in towing_items)
+        parts_summary_lines.append(f"- Towing/Impound Storage Charges: {len(towing_items)} item(s) totaling ${towing_total:,.2f}")
+    else:
+        parts_summary_lines.append("- Towing/Impound Storage Charges: None billed on repair invoice ($0.00)")
+
+    repair_parts_summary = "\n".join(parts_summary_lines)
+
     # Build auxiliary claims summary for prompt
     aux_lines = []
     if extraction.rental_receipt:
@@ -227,6 +264,8 @@ def investigator_node(state: ClaimState) -> dict:
         else "  • No adverse risk signals detected"
     )
 
+    mileage_display = f"{extraction.vehicle_mileage:,}" if extraction.vehicle_mileage else "Not reported"
+
     # =========================================================================
     # QUALITATIVE STEP 4: Contract Clause Auditing & Coverage Adjudication (LLM)
     # =========================================================================
@@ -249,11 +288,17 @@ Policy Clauses, Exclusions & Conditions:
 - Incident Date & Time: {extraction.incident_date} {extraction.incident_time or ''}
 - Location: {extraction.incident_location}
 - Accident Description: {extraction.incident_summary}
-- Damaged Vehicle: {extraction.vehicle_year} {extraction.vehicle_make} {extraction.vehicle_model} (VIN: {extraction.vehicle_vin})
+- Damaged Vehicle: {extraction.vehicle_year} {extraction.vehicle_make} {extraction.vehicle_model}
+- Vehicle Odometer: {mileage_display} miles
+- Vehicle VIN: {extraction.vehicle_vin}
 - Drivable: {extraction.is_drivable}
 - Police Report: {police_info}
 - Other Party Involved: {other_party_info}
-- Claimed Body Shop Repair Cost: ${extraction.claimed_grand_total:,.2f} (Facility: {extraction.repair_facility_name})
+- Repair Facility: {extraction.repair_facility_name}
+- Total Claimed Repair Cost: ${extraction.claimed_grand_total:,.2f} (Parts: ${extraction.total_parts_cost:,.2f}, Labor: ${extraction.total_labor_cost:,.2f}, Add'l: ${extraction.total_additional_costs:,.2f})
+
+=== 2B. BILLED REPAIR PARTS & CHARGES AUDIT ===
+{repair_parts_summary}
 
 === 3. AUXILIARY EXPENSES CLAIMED ===
 {auxiliary_claims_summary}
@@ -280,10 +325,21 @@ C. Multi-Line Policy Math (100% Pure Arithmetic Python):
    - Classify as 'collision' (impact with vehicle/object), 'comprehensive' (animal, weather, flood, theft), or 'liability_only'.
 2. Policy Status & Coverage Verdict:
    - Check if policy was active on incident date. Verdict must be 'covered', 'not_covered' (e.g. lapsed/cancelled/void), or 'partial_coverage'.
-3. Contract Clauses, Exclusions & Endorsements Audit:
-   - Exclusions: Check if loss facts trigger any exclusions (e.g. Commercial Rideshare Exclusion SEC-IV-EXCL-3). Populate 'applied_exclusions'.
+3. Case-Specific Policy Contract Clauses & Endorsement Auditing:
+   - Exclusions: Check if loss facts trigger exclusions (e.g. Commercial Rideshare Exclusion SEC-IV-EXCL-3). Populate 'applied_exclusions'.
    - Endorsements: Verify active riders (e.g. END-OEM-01). Populate 'endorsements_validated'.
-   - Conditions & Sub-limits: Audit vehicle age/mileage vs LKQ parts rule (SEC-IV-COND-7), custom equipment sub-limits (SEC-IV-LIMIT-4), and storage caps (SEC-IV-LIMIT-5). Populate 'clause_audit_notes'.
+   - Specific Clause Audit Notes ('clause_audit_notes'):
+     IMPORTANT: DO NOT simply quote or restate abstract policy text. Each note MUST explain HOW and WHY the clause applies to THIS claim's specific facts and figures:
+     a) LKQ Parts Rule (SEC-IV-COND-7):
+        - Cross-examine the vehicle's odometer ({mileage_display} miles) and model year ({extraction.vehicle_year}) against the 25,000-mile / 2-year threshold.
+        - Check Section 2B: Did the shop bill OEM parts?
+        - If OEM parts were billed AND Endorsement END-OEM-01 is NOT active: explicitly state that OEM parts CANNOT be reimbursed under the policy, explain WHY they are denied (vehicle has over 25,000 miles and the insured declined the OEM rider), and note that reimbursement is legally restricted to Like-Kind-and-Quality (LKQ) / certified aftermarket pricing.
+        - If END-OEM-01 IS active: explain that 100% OEM parts are authorized under the active rider despite the vehicle's mileage.
+     b) Custom Equipment Sub-Limit (SEC-IV-LIMIT-4):
+        - Check Section 2B for custom equipment or alloy wheels (e.g. M-Sport alloy wheel).
+        - State the specific item name and exact billed dollar amount, and verify if it is within or exceeds the $1,000.00 sub-limit.
+     c) Storage & Impound Cap (SEC-IV-LIMIT-5):
+        - Check Section 2B: If no impound/storage fees were billed on this estimate, DO NOT list this clause. Only audit clauses where expenses were actually claimed.
 4. Third-Party Liability Assessment:
    - If other party was involved, evaluate driver fault and whether insurer has third-party liability exposure. Populate 'liability_exposure_flag' and 'liability_exposure_summary'.
 """
@@ -304,6 +360,11 @@ C. Multi-Line Policy Math (100% Pure Arithmetic Python):
     result.siu_referral_recommended = ml_risk.siu_referral_recommended
     if ml_risk.top_risk_factors:
         result.detected_fraud_signals = [f"{f['factor']}: {f['detail']} ({f['impact']})" for f in ml_risk.top_risk_factors]
+
+    # Actuarial claim history overrides directly from policy database
+    result.prior_claims_count_12mo = int(clm_12)
+    result.prior_claims_count_24mo = int(clm_24)
+    result.policy_tenure_months = tenure_months
 
     # 3. Deterministic Multi-Line Policy Math
     result.collision_covered = policy_math["collision_covered"]

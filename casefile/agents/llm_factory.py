@@ -336,8 +336,8 @@ class MockStructuredLLM:
                     applied_exclusions=[],
                     endorsements_validated=[],
                     clause_audit_notes=[
-                        "Clause SEC-IV-COND-7 (LKQ Rule): Vehicle has 41,200 miles (>25,000 threshold). Shop billed $8,280 in OEM parts without active END-OEM-01 endorsement; LKQ standard applies.",
-                        "Clause SEC-IV-LIMIT-4 (Custom Equipment): M-Sport alloy wheel ($640.00) is within $1,000.00 custom equipment sub-limit."
+                        "Clause SEC-IV-COND-7 (LKQ Rule): Vehicle odometer is 41,200 miles (exceeding the 25,000-mile contract threshold) and endorsement END-OEM-01 is not active on this policy. The body shop billed $8,080.00 across 9 OEM parts. Under policy terms, OEM parts cannot be reimbursed; carrier reimbursement is restricted to Like-Kind-and-Quality (LKQ) / certified aftermarket pricing.",
+                        "Clause SEC-IV-LIMIT-4 (Custom Equipment): The M-Sport 18-inch alloy wheel billed at $640.00 constitutes aftermarket/custom equipment; verified eligible within the $1,000.00 aggregate policy sub-limit."
                     ],
                 )
             elif "clm-2026-00251" in prompt_lower or "susan" in prompt_lower:
