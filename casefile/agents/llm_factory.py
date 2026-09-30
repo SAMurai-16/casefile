@@ -50,14 +50,19 @@ class MockStructuredLLM:
                     repair_facility_tax_id="74-3298105",
                     estimate_date="2026-09-16",
                     itemized_repairs=[
-                        RepairLineItem(description="OEM RR BUMPER COVER", category="parts", part_type="OEM", amount=844.0, labor_hours=2.5),
+                        RepairLineItem(description="OEM RR BUMPER COVER (04715-T20-A90ZA)", category="parts", part_type="OEM", amount=485.0, labor_hours=2.5),
                         RepairLineItem(description="OEM RR REBAR / IMPACT BAR", category="parts", part_type="OEM", amount=215.0),
                         RepairLineItem(description="OEM ABSORBER, RR BUMPER", category="parts", part_type="OEM", amount=78.0),
-                        RepairLineItem(description="OEM TRUNK LID ASSY", category="parts", part_type="OEM", amount=620.0, labor_hours=2.0),
-                        RepairLineItem(description="RT OUTER TAIL LAMP ASSY", category="parts", part_type="OEM", amount=165.0, labor_hours=0.5),
-                        RepairLineItem(description="LT OUTER TAIL LAMP ASSY", category="parts", part_type="OEM", amount=165.0, labor_hours=0.5),
-                        RepairLineItem(description="REAR BODY PANEL REPAIR", category="body_labor", part_type=None, amount=249.0, labor_hours=3.5),
-                        RepairLineItem(description="LT REAR QUARTER PANEL BLEND/REFINISH", category="paint_labor", part_type=None, amount=306.0, labor_hours=4.5),
+                        RepairLineItem(description="OEM TRUNK LID SHELL", category="parts", part_type="OEM", amount=620.0, labor_hours=3.0),
+                        RepairLineItem(description="OEM LATCH & STRIKER ASSY, TRUNK", category="parts", part_type="OEM", amount=95.0),
+                        RepairLineItem(description="OEM COMBINATION LAMP ASSY, LT LED", category="parts", part_type="OEM", amount=310.0, labor_hours=0.5),
+                        RepairLineItem(description="OEM COMBINATION LAMP ASSY, RT LED", category="parts", part_type="OEM", amount=310.0, labor_hours=0.5),
+                        RepairLineItem(description="OEM ULTRASONIC PARKING SENSOR PAIR", category="parts", part_type="OEM", amount=145.0, labor_hours=0.5),
+                        RepairLineItem(description="LT REAR QUARTER PANEL DENT REPAIR / PDR", category="body_labor", part_type=None, amount=195.0, labor_hours=3.0),
+                        RepairLineItem(description="RT REAR QUARTER PANEL PULL & DRESS", category="body_labor", part_type=None, amount=31.0, labor_hours=0.5),
+                        RepairLineItem(description="HONDA DEALER SUBLET: REAR RADAR", category="sublet", part_type="SUB", amount=175.0),
+                        RepairLineItem(description="CHECK & ADJUST 4-WHEEL ALIGNMENT", category="mechanical_labor", part_type=None, amount=95.0, labor_hours=1.0),
+                        RepairLineItem(description="PAINT & REFINISH MATERIALS", category="paint_materials", part_type="MATL", amount=185.0),
                     ],
                     total_parts_cost=2258.00,
                     total_labor_cost=1213.50,
@@ -545,7 +550,7 @@ class ResilientStructuredLLM:
             err_name = e.__class__.__name__
             err_msg = str(e).lower()
             if any(k in err_msg for k in ["429", "503", "504", "deadline", "timeout", "quota", "resource_exhausted", "unavailable", "rate"]):
-                print(f"  [API Notice: {err_name}] Live provider unavailable; seamlessly utilizing deterministic fallback.")
+                print(f"  [API Notice: {err_name} ({e})] Live provider unavailable; seamlessly utilizing deterministic fallback.")
                 return self.fallback_llm.invoke(prompt)
             raise
 
@@ -569,7 +574,7 @@ class LLMFactory:
                 temperature=0.0,
                 google_api_key=api_key,
                 max_retries=1,
-                timeout=15.0,
+                timeout=60.0,
             )
             primary = llm.with_structured_output(output_schema)
             fallback = MockStructuredLLM(output_schema)
