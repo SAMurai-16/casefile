@@ -13,7 +13,7 @@ def generate_30_claims():
         claim_num_str = f"{idx:03d}"
         base_num = base_claims[(idx - 1) % len(base_claims)]
         
-        fnol, est, pol = store.load_claim_package(base_num)
+        fnol, est, pol, rental, med, third_party = store.load_claim_package(base_num)
         new_claim_id = f"CLM-2026-{10000 + idx}"
         
         # Clone and customize FNOL
@@ -46,6 +46,23 @@ def generate_30_claims():
             json.dump(est_copy, f, indent=2)
         with open(pol_file, "w", encoding="utf-8") as f:
             json.dump(pol_copy, f, indent=2)
+
+        # Clone optional auxiliary documents if present
+        if rental:
+            r_copy = json.loads(json.dumps(rental))
+            r_file = DATA_DIR / f"claim_{claim_num_str}_rental_receipt.json"
+            with open(r_file, "w", encoding="utf-8") as f:
+                json.dump(r_copy, f, indent=2)
+        if med:
+            m_copy = json.loads(json.dumps(med))
+            m_file = DATA_DIR / f"claim_{claim_num_str}_medical_bill.json"
+            with open(m_file, "w", encoding="utf-8") as f:
+                json.dump(m_copy, f, indent=2)
+        if third_party:
+            tp_copy = json.loads(json.dumps(third_party))
+            tp_file = DATA_DIR / f"claim_{claim_num_str}_third_party.json"
+            with open(tp_file, "w", encoding="utf-8") as f:
+                json.dump(tp_copy, f, indent=2)
             
     print(f"Generated 30 complete claim document packages in {DATA_DIR}")
 

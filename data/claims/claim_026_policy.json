@@ -78,5 +78,46 @@
         "fault": "Not-at-fault (road debris)"
       }
     ]
-  }
+  },
+  "active_endorsements": [
+    {
+      "code": "END-OEM-01",
+      "title": "Original Equipment Manufacturer (OEM) Parts Replacement Rider",
+      "status": "Active",
+      "effective_date": "2024-03-01",
+      "description": "Waives SEC-IV-COND-7 LKQ restriction. Authorizes 100% new OEM parts for collision repairs regardless of vehicle age or mileage."
+    }
+  ],
+  "policy_clauses_and_exclusions": [
+    {
+      "clause_id": "SEC-IV-EXCL-3",
+      "title": "Commercial Rideshare and Delivery Exclusion",
+      "category": "Exclusion",
+      "text": "This policy does not provide Collision, Comprehensive, or Liability coverage for any loss occurring while the insured vehicle is logged into any digital network platform (such as Uber, Lyft, DoorDash, or Instacart) or being used to transport passengers or goods for compensation, unless commercial endorsement END-TNC-08 is in force."
+    },
+    {
+      "clause_id": "SEC-IV-COND-7",
+      "title": "Parts Replacement Standard (Like-Kind-and-Quality / LKQ Rule)",
+      "category": "Condition",
+      "text": "For any vehicle older than 2 model years or with odometer exceeding 25,000 miles at the time of loss, repair estimates must utilize like-kind-and-quality (LKQ) certified aftermarket, recycled, or remanufactured parts. Original Equipment Manufacturer (OEM) parts will only be reimbursed if active Endorsement END-OEM-01 is held on the policy."
+    },
+    {
+      "clause_id": "SEC-IV-LIMIT-2",
+      "title": "Permissive User Step-Down Limit",
+      "category": "Condition",
+      "text": "If the vehicle is operated with permission by an individual not listed as a named driver on the Declarations Page, collision coverage is limited to state statutory minimum limits ($15,000) and the collision deductible increases to $1,000.00."
+    },
+    {
+      "clause_id": "SEC-IV-LIMIT-4",
+      "title": "Custom Equipment and Modifications Sub-Limit",
+      "category": "Sub-Limit",
+      "text": "Coverage for non-factory installed aftermarket equipment, including custom alloy wheels, performance suspensions, specialized audio, and vehicle wraps, is strictly capped at $1,000.00 aggregate per incident, unless separately declared under Endorsement END-CPE-12."
+    },
+    {
+      "clause_id": "SEC-IV-LIMIT-5",
+      "title": "Reasonable Storage and Impound Towing Cap",
+      "category": "Sub-Limit",
+      "text": "Reimbursement for post-collision impound storage is capped at $50.00 per calendar day up to a maximum of 5 days ($250.00 total) unless prior written carrier authorization is obtained."
+    }
+  ]
 }

@@ -145,6 +145,20 @@ class InvestigationResult(BaseModel):
     detected_fraud_signals: List[str] = Field(default_factory=list, description="Specific risk indicators and SHAP feature impacts")
     siu_referral_recommended: bool = Field(description="Whether Special Investigation Unit should review")
 
+    # 7. Policy Contract Clauses & Endorsement Auditing
+    applied_exclusions: List[str] = Field(
+        default_factory=list,
+        description="Policy exclusions triggered by loss facts (e.g. Commercial Rideshare Exclusion)"
+    )
+    endorsements_validated: List[str] = Field(
+        default_factory=list,
+        description="Active policy endorsement riders verified in force (e.g. OEM Parts Replacement Rider)"
+    )
+    clause_audit_notes: List[str] = Field(
+        default_factory=list,
+        description="Contractual compliance observations on LKQ parts rules, custom equipment caps, or permissive drivers"
+    )
+
 class ReviewResult(BaseModel):
     """Cross-document sanity check and recommendation produced by the Reviewer Agent."""
     claim_id: str

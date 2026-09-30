@@ -35,16 +35,17 @@ def _parse_is_late_night(time_str: str, text: str) -> float:
 def investigator_node(state: ClaimState) -> dict:
     """
     Investigator Agent:
-    1. Reads structured Extraction findings and raw Policy contract.
+    1. Reads structured Extraction findings and raw Policy contract (including legal clauses & endorsements).
     2. Computes pre-accident Actual Cash Value (ACV) and repair-to-ACV ratio via ValuationService.
     3. Runs LightGBM ML risk model to calculate calibrated fraud score & SHAP factor contributions.
-    4. Evaluates all policy coverage lines (Collision, Rental, MedPay, Liability).
+    4. Evaluates all policy coverage lines (Collision, Rental, MedPay, Liability) and legal clauses.
     """
     extraction = state.get("extraction")
     if not extraction:
         raise ValueError("Investigator requires extraction to be completed before running.")
 
-    policy_str = json.dumps(state["policy_raw"], indent=2)
+    policy_raw = state["policy_raw"]
+    policy_str = json.dumps(policy_raw, indent=2)
 
     # 1. Deterministic Vehicle Valuation (CCC ONE / KBB proxy)
     val_svc = ValuationService()
@@ -58,8 +59,8 @@ def investigator_node(state: ClaimState) -> dict:
     )
 
     # 2. Extract Features for LightGBM Risk Model
-    pol_data = state["policy_raw"].get("policy", {})
-    claim_hist = state["policy_raw"].get("claim_history", {})
+    pol_data = policy_raw.get("policy", {})
+    claim_hist = policy_raw.get("claim_history", {})
     
     # Calculate policy tenure
     eff_date = pol_data.get("effective_date", "2024-01-01")
@@ -96,6 +97,20 @@ def investigator_node(state: ClaimState) -> dict:
     risk_engine = ClaimsRiskModel()
     ml_risk = risk_engine.predict_risk(ml_features)
 
+    # Format Policy Endorsements & Legal Clauses
+    endorsements = policy_raw.get("active_endorsements", [])
+    clauses = policy_raw.get("policy_clauses_and_exclusions", [])
+
+    endorsements_text = "\n".join(
+        f"- [{e.get('code', 'RIDER')}] {e.get('title', '')}: {e.get('description', '')}"
+        for e in endorsements
+    ) if endorsements else "- No optional endorsement riders active on this policy."
+
+    clauses_text = "\n".join(
+        f"- [{c.get('clause_id', 'CLAUSE')}] ({c.get('category', 'Condition')}) {c.get('title', '')}: {c.get('text', '')}"
+        for c in clauses
+    ) if clauses else "- Standard personal auto policy terms."
+
     # Build auxiliary claims summary for prompt
     aux_lines = []
     if extraction.rental_receipt:
@@ -122,10 +137,17 @@ def investigator_node(state: ClaimState) -> dict:
 
     prompt = f"""
 You are the Insurance Coverage Investigator Agent.
-Evaluate coverage, limits, deductibles, and fraud risk by cross-referencing the Policy Record with the extracted claim facts and automated analytical models.
+Evaluate coverage, limits, deductibles, legal clauses, and fraud risk by cross-referencing the Policy Record with the extracted claim facts and automated analytical models.
 
-=== 1. POLICY & COVERAGE RECORD ===
+=== 1. POLICY & COVERAGE LIMITS ===
 {policy_str}
+
+=== 1B. ACTIVE ENDORSEMENTS & LEGAL POLICY CLAUSES ===
+Active Endorsement Riders:
+{endorsements_text}
+
+Policy Clauses, Exclusions & Conditions:
+{clauses_text}
 
 === 2. CLAIM & LOSS CIRCUMSTANCES (STRUCTURED EXTRACTION) ===
 - Claim ID: {extraction.claim_id}
@@ -161,6 +183,10 @@ Evaluate coverage, limits, deductibles, and fraud risk by cross-referencing the 
 5. Medical Payments: If medical bills claimed and covered, compute eligible MedPay payout up to policy per-person limit.
 6. Third-Party Liability: If other party claimed damage or injury, assess liability exposure.
 7. Fraud Risk: Record the pre-computed fraud score, risk tier, and referral status from Section 5.
+8. Policy Contract Clauses & Endorsements Audit:
+   - Exclusions: Check if loss facts trigger any exclusions (e.g. Commercial Rideshare Exclusion SEC-IV-EXCL-3). Populate 'applied_exclusions'.
+   - Endorsements: Verify active riders (e.g. END-OEM-01). Populate 'endorsements_validated'.
+   - Conditions & Sub-limits: Audit vehicle age/mileage vs Like-Kind-Quality (LKQ) rule (SEC-IV-COND-7), custom equipment sub-limits (SEC-IV-LIMIT-4), and storage caps (SEC-IV-LIMIT-5). Populate 'clause_audit_notes'.
 """
     structured_llm = LLMFactory.get_structured_llm(InvestigationResult)
     result: InvestigationResult = structured_llm.invoke(prompt)
@@ -189,6 +215,9 @@ Evaluate coverage, limits, deductibles, and fraud risk by cross-referencing the 
     if result.is_total_loss_candidate:
         coverage_details.append(f"TOTAL LOSS ({result.repair_to_acv_ratio * 100:.1f}% ACV)")
     
+    clause_notes_count = len(result.clause_audit_notes) if result.clause_audit_notes else 0
+    clause_summary = f" [Clauses: {clause_notes_count} audited]" if clause_notes_count else ""
+
     handoff = HandoffPayload(
         source_node="investigator",
         target_node="supervisor",
@@ -196,7 +225,7 @@ Evaluate coverage, limits, deductibles, and fraud risk by cross-referencing the 
         claim_id=state["claim_id"],
         step_number=state["step_count"] + 1,
         timestamp=datetime.now(timezone.utc).isoformat(),
-        summary=f"Coverage verdict: {result.coverage_verdict.upper()} ({', '.join(coverage_details)}) [LightGBM Risk: {result.fraud_risk_level.upper()} {result.fraud_risk_score}/100]"
+        summary=f"Coverage verdict: {result.coverage_verdict.upper()} ({', '.join(coverage_details)}) [LightGBM Risk: {result.fraud_risk_level.upper()} {result.fraud_risk_score}/100]{clause_summary}"
     )
 
     return {

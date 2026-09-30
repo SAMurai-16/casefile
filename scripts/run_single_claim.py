@@ -102,6 +102,18 @@ def run_claim(claim_id_input: str, auto_approve: bool = True, provider: str = No
             if investigation_res.is_total_loss_candidate:
                 print("  🚨 TOTAL LOSS CANDIDATE: Repair cost exceeds statutory total loss threshold.")
 
+        if investigation_res and (investigation_res.endorsements_validated or investigation_res.clause_audit_notes or investigation_res.applied_exclusions):
+            print("  Policy Contract & Clause Audit:")
+            if investigation_res.endorsements_validated:
+                for end in investigation_res.endorsements_validated:
+                    print(f"    📜 Active Endorsement: {end}")
+            if investigation_res.applied_exclusions:
+                for excl in investigation_res.applied_exclusions:
+                    print(f"    🚫 Exclusion Triggered: {excl}")
+            if investigation_res.clause_audit_notes:
+                for note in investigation_res.clause_audit_notes:
+                    print(f"    ⚖️  Contract Clause:    {note}")
+
         if review_res and review_res.discrepancy_details:
             print("  Discrepancies Audited:")
             for disc in review_res.discrepancy_details:
