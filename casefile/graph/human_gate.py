@@ -7,7 +7,7 @@ def human_gate_node(state: ClaimState) -> dict:
     Human Approval Gate:
     Enforces the mandate: 'Never pay out without a human.'
     Pauses graph execution via interrupt() to await adjuster authorization.
-    Presents itemized multi-bucket payout table and liability warnings.
+    Presents itemized multi-bucket payout table, risk profile, and liability warnings.
     """
     review = state.get("review")
     extraction = state.get("extraction")
@@ -21,6 +21,23 @@ def human_gate_node(state: ClaimState) -> dict:
         "claim_id": state["claim_id"],
         "policyholder_vehicle": f"{extraction.vehicle_year} {extraction.vehicle_make} {extraction.vehicle_model}" if extraction else "Unknown",
         "repair_shop": extraction.repair_facility_name if extraction else "Unknown",
+        
+        # Actuarial Risk Profile & Vehicle Valuation
+        "fraud_risk_score": investigation.fraud_risk_score if investigation else 0,
+        "fraud_risk_level": investigation.fraud_risk_level if investigation else "low",
+        "siu_referral_recommended": investigation.siu_referral_recommended if investigation else False,
+        "detected_fraud_signals": investigation.detected_fraud_signals if investigation else [],
+        "actual_cash_value": investigation.actual_cash_value if investigation else 0.0,
+        "repair_to_acv_ratio": investigation.repair_to_acv_ratio if investigation else 0.0,
+        "is_total_loss_candidate": investigation.is_total_loss_candidate if investigation else False,
+        
+        # Contract Terms & Clause Auditing
+        "endorsements_validated": investigation.endorsements_validated if investigation else [],
+        "applied_exclusions": investigation.applied_exclusions if investigation else [],
+        "clause_audit_notes": investigation.clause_audit_notes if investigation else [],
+        "discrepancy_details": review.discrepancy_details if review else [],
+
+        # Settlement Payout Breakdown
         "itemized_payout_breakdown": breakdown,
         "total_proposed_payout": proposed_amount,
         "policy_collision_limit": investigation.collision_limit_per_incident if investigation else 0.0,
