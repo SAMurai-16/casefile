@@ -114,8 +114,20 @@ def investigator_node(state: ClaimState) -> dict:
     police_info = f"Filed ({extraction.police_report_number or 'Report on file'})" if extraction.police_report_filed else "None filed"
     other_party_info = f"Yes - {extraction.other_party_details or 'Third party involved'}" if extraction.other_party_involved else "No (Single-vehicle incident)"
 
-    extraction_summary = f"""
-=== CLAIM & LOSS CIRCUMSTANCES (STRUCTURED EXTRACTION) ===
+    shap_factors = (
+        "\n".join(f"  • {f['factor']}: {f['detail']} ({f['impact']})" for f in ml_risk.top_risk_factors)
+        if ml_risk.top_risk_factors
+        else "  • No adverse risk signals detected"
+    )
+
+    prompt = f"""
+You are the Insurance Coverage Investigator Agent.
+Evaluate coverage, limits, deductibles, and fraud risk by cross-referencing the Policy Record with the extracted claim facts and automated analytical models.
+
+=== 1. POLICY & COVERAGE RECORD ===
+{policy_str}
+
+=== 2. CLAIM & LOSS CIRCUMSTANCES (STRUCTURED EXTRACTION) ===
 - Claim ID: {extraction.claim_id}
 - Incident Date & Time: {extraction.incident_date} {extraction.incident_time or ''}
 - Location: {extraction.incident_location}
@@ -125,41 +137,30 @@ def investigator_node(state: ClaimState) -> dict:
 - Police Report: {police_info}
 - Other Party Involved: {other_party_info}
 - Claimed Body Shop Repair Cost: ${extraction.claimed_grand_total:,.2f} (Facility: {extraction.repair_facility_name})
-=== AUXILIARY EXPENSES CLAIMED ===
+
+=== 3. AUXILIARY EXPENSES CLAIMED ===
 {auxiliary_claims_summary}
 
-=== VEHICLE VALUATION & TOTAL LOSS AUDIT ===
+=== 4. VEHICLE VALUATION & TOTAL LOSS AUDIT (DETERMINISTIC) ===
 - Pre-Accident Market ACV: ${valuation.actual_cash_value:,.2f}
 - Claimed Repair Cost: ${valuation.repair_estimate_total:,.2f}
 - Repair / ACV Ratio: {valuation.repair_to_acv_ratio * 100:.1f}%
 - Total Loss Threshold Triggered: {valuation.is_total_loss_candidate}
 
-=== LIGHTGBM ML FRAUD RISK MODEL RESULTS ===
+=== 5. LIGHTGBM ML FRAUD RISK MODEL RESULTS ===
 - Calibrated Risk Score: {ml_risk.fraud_risk_score} / 100 ({ml_risk.fraud_risk_level.upper()})
 - SIU Referral Mandatory: {ml_risk.siu_referral_recommended}
 - Top Risk Factors Identified:
-{chr(10).join(f"  • {f['factor']}: {f['detail']} ({f['impact']})" for f in ml_risk.top_risk_factors) if ml_risk.top_risk_factors else "  • No adverse risk signals detected"}
-"""
+{shap_factors}
 
-    prompt = f"""
-You are the Insurance Coverage Investigator Agent.
-Examine the customer's Policy Record, structured loss circumstances, and the automated vehicle valuation / LightGBM risk findings.
-
-=== DOCUMENT: POLICY & COVERAGE RECORD ===
-{policy_str}
-{extraction_summary}
-
-Adjudication Tasks:
-1. Verify policy status (Active vs Lapsed/Cancelled).
-2. Collision Coverage: Determine collision limit and deductible, and calculate max eligible repair payout.
-3. Incorporate Vehicle Valuation:
-   - actual_cash_value: {valuation.actual_cash_value}
-   - repair_to_acv_ratio: {valuation.repair_to_acv_ratio}
-   - is_total_loss_candidate: {valuation.is_total_loss_candidate}
-4. Rental Reimbursement: If covered and rental claimed, calculate eligible rental payout.
-5. Medical Payments: If covered and medical bills present, calculate eligible MedPay payout.
-6. Third-Party Liability: Assess exposure if insured was at fault with third-party claims.
-7. Fraud Risk: Use the LightGBM score of {ml_risk.fraud_risk_score} and tier '{ml_risk.fraud_risk_level}'.
+=== ADJUDICATION INSTRUCTIONS ===
+1. Policy Status: Verify if policy was active on incident date (mark 'not_covered' if lapsed/cancelled).
+2. Collision Coverage: If covered, apply collision limit and deductible to calculate max eligible repair payout.
+3. Total Loss: Incorporate the pre-computed ACV, repair ratio, and total loss status from Section 4.
+4. Rental Reimbursement: If rental claimed and covered, compute eligible rental payout against daily and max duration caps.
+5. Medical Payments: If medical bills claimed and covered, compute eligible MedPay payout up to policy per-person limit.
+6. Third-Party Liability: If other party claimed damage or injury, assess liability exposure.
+7. Fraud Risk: Record the pre-computed fraud score, risk tier, and referral status from Section 5.
 """
     structured_llm = LLMFactory.get_structured_llm(InvestigationResult)
     result: InvestigationResult = structured_llm.invoke(prompt)
