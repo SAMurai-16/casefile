@@ -24,7 +24,7 @@ class MockStructuredLLM:
         
         # Route based on output schema type
         if self.output_schema == ExtractionResult:
-            if "clm-2026-00147" in prompt_lower or "maria" in prompt_lower:
+            if "clm-2026-00147" in prompt_lower or "10001" in prompt_lower or "maria" in prompt_lower:
                 return ExtractionResult(
                     claim_id="CLM-2026-00147",
                     incident_date="2026-09-14",
@@ -84,7 +84,7 @@ class MockStructuredLLM:
                     ],
                     third_party_claim=None
                 )
-            elif "clm-2026-00203" in prompt_lower or "derek" in prompt_lower:
+            elif "clm-2026-00203" in prompt_lower or "10002" in prompt_lower or "derek" in prompt_lower:
                 return ExtractionResult(
                     claim_id="CLM-2026-00203",
                     incident_date="2026-09-19",
@@ -128,7 +128,7 @@ class MockStructuredLLM:
                     medical_bills=None,
                     third_party_claim=None
                 )
-            elif "clm-2026-00251" in prompt_lower or "susan" in prompt_lower:
+            elif "clm-2026-00251" in prompt_lower or "10003" in prompt_lower or "susan" in prompt_lower:
                 return ExtractionResult(
                     claim_id="CLM-2026-00251",
                     incident_date="2026-09-22",
@@ -166,7 +166,7 @@ class MockStructuredLLM:
                     medical_bills=None,
                     third_party_claim=None
                 )
-            elif "clm-2026-00278" in prompt_lower or "travis" in prompt_lower:
+            elif "clm-2026-00278" in prompt_lower or "10004" in prompt_lower or "travis" in prompt_lower:
                 return ExtractionResult(
                     claim_id="CLM-2026-00278",
                     incident_date="2026-09-23",
@@ -254,7 +254,7 @@ class MockStructuredLLM:
                 )
 
         elif self.output_schema == InvestigationResult:
-            if "clm-2026-00147" in prompt_lower or "maria" in prompt_lower:
+            if "clm-2026-00147" in prompt_lower or "10001" in prompt_lower or "maria" in prompt_lower:
                 return InvestigationResult(
                     claim_id="CLM-2026-00147",
                     policy_number="HIC-TX-2024-884712",
@@ -295,7 +295,7 @@ class MockStructuredLLM:
                         "Clause SEC-IV-COND-7 (LKQ Rule): 100% OEM parts authorized under active END-OEM-01 endorsement despite 28,450 miles."
                     ],
                 )
-            elif "clm-2026-00203" in prompt_lower or "derek" in prompt_lower:
+            elif "clm-2026-00203" in prompt_lower or "10002" in prompt_lower or "derek" in prompt_lower:
                 return InvestigationResult(
                     claim_id="CLM-2026-00203",
                     policy_number="NWM-IL-2026-220184",
@@ -340,7 +340,7 @@ class MockStructuredLLM:
                         "Clause SEC-IV-LIMIT-4 (Custom Equipment): The M-Sport 18-inch alloy wheel billed at $640.00 constitutes aftermarket/custom equipment; verified eligible within the $1,000.00 aggregate policy sub-limit."
                     ],
                 )
-            elif "clm-2026-00251" in prompt_lower or "susan" in prompt_lower:
+            elif "clm-2026-00251" in prompt_lower or "10003" in prompt_lower or "susan" in prompt_lower:
                 return InvestigationResult(
                     claim_id="CLM-2026-00251",
                     policy_number="PGR-WA-2025-557283",
@@ -374,7 +374,7 @@ class MockStructuredLLM:
                     detected_fraud_signals=[],
                     siu_referral_recommended=False,
                 )
-            elif "clm-2026-00278" in prompt_lower or "travis" in prompt_lower:
+            elif "clm-2026-00278" in prompt_lower or "10004" in prompt_lower or "travis" in prompt_lower:
                 return InvestigationResult(
                     claim_id="CLM-2026-00278",
                     policy_number="ALT-GA-2026-390714",
