@@ -43,8 +43,20 @@ def compute_multi_line_policy_math(
     and medical payments limits without any LLM float math or hallucination.
     """
     pol_data = policy_raw.get("policy", {})
-    raw_status = pol_data.get("status", "Active")
-    is_active = "active" in raw_status.lower()
+    raw_status = str(pol_data.get("status", "Active")).strip().lower()
+    
+    inactive_keywords = ["not active", "inactive", "cancel", "lapse", "expired", "suspended", "void", "terminated"]
+    is_inactive = any(kw in raw_status for kw in inactive_keywords)
+    is_active = (not is_inactive) and ("active" in raw_status or "current" in raw_status or "in force" in raw_status)
+
+    if is_active:
+        resolved_status = "Active"
+    elif "cancel" in raw_status:
+        resolved_status = "Cancelled"
+    elif "suspend" in raw_status:
+        resolved_status = "Suspended"
+    else:
+        resolved_status = "Lapsed"
 
     cov = policy_raw.get("coverage", {})
 
@@ -99,7 +111,7 @@ def compute_multi_line_policy_math(
     bi_limit = float(cov.get("bodily_injury_liability", {}).get("per_person_limit") or 0.0) if is_active else 0.0
 
     return {
-        "policy_status": "Active" if is_active else ("Cancelled" if "cancel" in raw_status.lower() else "Lapsed"),
+        "policy_status": resolved_status,
         "collision_covered": col_covered,
         "collision_limit_per_incident": col_limit if col_covered else None,
         "collision_deductible": col_deductible if col_covered else None,
@@ -322,6 +334,11 @@ C. Multi-Line Policy Math (100% Pure Arithmetic Python):
     # =========================================================================
     # STRICT OVERRIDE: Enforce 100% Deterministic Python & ML Results
     # =========================================================================
+    # Set policyholder name from policy contract
+    ph = policy_raw.get("policyholder") or policy_raw.get("policy_holder") or pol_data.get("policyholder") or {}
+    if isinstance(ph, dict) and ph.get("name"):
+        result.policyholder_name = ph.get("name")
+
     # 1. Deterministic Vehicle Valuation & Total Loss
     result.actual_cash_value = valuation.actual_cash_value
     result.repair_to_acv_ratio = valuation.repair_to_acv_ratio
@@ -361,8 +378,16 @@ C. Multi-Line Policy Math (100% Pure Arithmetic Python):
     result.property_damage_liability_limit = policy_math["property_damage_liability_limit"]
     result.bodily_injury_per_person_limit = policy_math["bodily_injury_per_person_limit"]
 
+    # Enforce deterministic policy status from document
+    result.policy_status = policy_math["policy_status"]
+
     # Void/Lapsed policy guard: zero out all payouts if not covered or policy inactive
     if result.coverage_verdict == "not_covered" or policy_math["policy_status"] in ("Lapsed", "Cancelled", "Suspended"):
+        result.coverage_verdict = "not_covered"
+        result.coverage_denial_reason = f"Policy is {policy_math['policy_status'].lower()} at date of loss."
+        result.collision_covered = False
+        result.rental_reimbursement_covered = False
+        result.medpay_covered = False
         result.max_eligible_collision_payout = 0.0
         result.rental_eligible_payout = 0.0
         result.medpay_eligible_payout = 0.0

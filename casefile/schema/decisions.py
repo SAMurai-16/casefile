@@ -44,6 +44,8 @@ class ExtractionResult(BaseModel):
     incident_time: Optional[str] = Field(default=None, description="Approximate time of day")
     incident_location: str = Field(description="Intersection, street, or city of accident")
     incident_summary: str = Field(description="Clear factual summary of how the accident happened")
+    insured_name: Optional[str] = Field(default=None, description="Primary named policyholder / insured contact on FNOL")
+    driver_name: Optional[str] = Field(default=None, description="Name of driver operating the vehicle at the time of loss")
     
     # Damaged vehicle facts
     vehicle_vin: str
@@ -94,6 +96,7 @@ class InvestigationResult(BaseModel):
     """Coverage and fraud evaluation produced by the Investigator Agent."""
     claim_id: str
     policy_number: str
+    policyholder_name: Optional[str] = Field(default=None, description="Named insured on policy contract")
     policy_status: Literal["Active", "Lapsed", "Cancelled", "Suspended"]
     policy_effective_date: str
     policy_expiration_date: str

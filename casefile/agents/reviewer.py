@@ -71,6 +71,7 @@ def reviewer_node(state: ClaimState) -> dict:
                             f"Shop invoice line-item parts variance detected: Stated parts subtotal (${stated_parts:,.2f}) exceeds sum of itemized parts (${raw_parts_sum:,.2f}) by ${diff:,.2f}."
                         )
 
+
     # =========================================================================
     # STEP 2: DETERMINISTIC PAYOUT & LIMIT ADJUDICATION (Pure Python)
     # =========================================================================
@@ -182,6 +183,33 @@ def reviewer_node(state: ClaimState) -> dict:
     other_party_info = f"Yes ({extraction.other_party_details or 'Third party involved'})" if extraction.other_party_involved else "No (Single-vehicle incident)"
     mileage_str = f"{extraction.vehicle_mileage:,}" if extraction.vehicle_mileage else "Not reported"
 
+    policy_raw = state.get("policy_raw", {})
+    fnol_raw = state.get("fnol_raw", {})
+
+    policy_contract_holder = (
+        investigation.policyholder_name or
+        (policy_raw.get("policyholder", {}) if isinstance(policy_raw.get("policyholder"), dict) else {}).get("name") or
+        (policy_raw.get("policy_holder", {}) if isinstance(policy_raw.get("policy_holder"), dict) else {}).get("name") or
+        "Not specified"
+    )
+
+    fnol_contact = (
+        fnol_raw.get("intake_header", {}).get("insured_contact", {}) or
+        fnol_raw.get("insured_contact") or {}
+    ) if isinstance(fnol_raw, dict) else {}
+
+    fnol_filing_name = (
+        (fnol_contact.get("full_name") if isinstance(fnol_contact, dict) else None) or
+        getattr(extraction, "insured_name", None) or
+        policy_contract_holder
+    )
+
+    driver = (
+        getattr(extraction, "driver_name", None) or
+        getattr(extraction, "insured_name", None) or
+        policy_contract_holder
+    )
+
     # =========================================================================
     # STEP 3: ADVERSARIAL DAMAGE CROSS-EXAMINATION & SYNTHESIS (LLM)
     # =========================================================================
@@ -189,8 +217,11 @@ def reviewer_node(state: ClaimState) -> dict:
 You are the Senior Claims Reviewer Agent.
 Your job is adversarial cross-document examination, verifying contractual compliance across all lines, and synthesizing the executive justification for the Human Approval Gate.
 
-=== CLAIM & VEHICLE IDENTIFICATION ===
+=== CLAIM & IDENTITY VERIFICATION ===
 - Claim ID: {state["claim_id"]}
+- Policy Contract Named Policyholder: {policy_contract_holder}
+- FNOL Intake Filing Insured / Contact: {fnol_filing_name}
+- Vehicle Operator / Driver: {driver}
 - Insured Vehicle: {extraction.vehicle_year} {extraction.vehicle_make} {extraction.vehicle_model} (VIN: {extraction.vehicle_vin}, Plate: {extraction.vehicle_license_plate or 'N/A'}, Odometer: {mileage_str} miles)
 - Incident Date & Location: {extraction.incident_date} {extraction.incident_time or ''} at {extraction.incident_location}
 - Driver Account: {extraction.incident_summary}
@@ -243,27 +274,48 @@ Review Tasks:
 1. Physical Damage Alignment:
    - Check if body shop operations match the impact physics and damage areas described by the driver.
    - Flag any unitemized panels, invoice padding, or unrelated prior damage in discrepancy_details.
-2. Contractual & Legal Clause Compliance:
+2. Temporal & Entity Consistency:
+   - Policyholder & Filing Identity Cross-Examination: Cross-examine the Named Policyholder on the policy contract against the Filing Insured / Contact on the FNOL Intake. If they are different individuals or unverified third parties, you MUST flag an Entity Mismatch in discrepancy_details and explain the identity discrepancy in your justification and liability_warning.
+   - Auxiliary Expense Cross-Examination: Cross-examine all auxiliary expenses (medical bills, rental invoices) for chronological plausibility against the incident date (e.g. treatments or invoices occurring in a different year, or predating the crash).
+   - Cross-examine patient/claimant names on medical bills and rental receipts against the named policyholder and driver.
+   - Flag any chronological anomalies, out-of-sequence dates, or entity/name mismatches in discrepancy_details and note them in your justification.
+3. Contractual & Legal Clause Compliance:
    - Cross-check the itemized operations and payout against the Investigator's clause audit notes and active endorsements.
    - If OEM parts were billed without an active OEM rider under LKQ rules (SEC-IV-COND-7), reference this finding.
    - If custom equipment limits apply (SEC-IV-LIMIT-4), verify that custom items are compliant.
-3. Settlement Recommendation:
+4. Settlement Recommendation & Payout Adjudication:
    - If Policy is Lapsed/Cancelled: recommend "deny".
    - If SIU Referral is Recommended or Fraud is Critical: recommend "escalate_siu".
    - If unresolvable factual contradiction exists between driver narrative and damage areas (e.g. impact described on rear bumper, but estimate bills front suspension, and rework < 2): recommend "rework" with target and instructions.
      NOTE: Do NOT request rework for shop arithmetic discrepancies or auxiliary limit caps; those are already audited and presented to the human adjuster in discrepancy_details.
+   - If severe discrepancies, entity mismatches, or fraudulent auxiliary claims are detected: disallow those specific lines (e.g. medical=0.0) in payout_breakdown and recommend "partial_approve" or "deny".
    - If repair cost exceeds policy collision limit: recommend "partial_approve".
    - Otherwise: recommend "approve".
-4. Adjuster Briefing:
+5. Adjuster Briefing:
    - Write a clear, comprehensive executive justification summarizing the evidence, coverage application, clause notes, and any detected discrepancies.
    - If third-party claims exist without active coverage, include a clear liability_warning.
 """
     structured_llm = LLMFactory.get_structured_llm(ReviewResult)
     result: ReviewResult = structured_llm.invoke(prompt)
 
-    # Ensure deterministic math & audit results override/enrich LLM outputs
-    result.payout_breakdown = payout_breakdown
-    result.proposed_payout_amount = proposed_payout
+    # Ensure deterministic math & audit results enforce safety caps while respecting LLM line disallowances
+    final_payout_breakdown = dict(payout_breakdown)
+    if result.recommendation in ("deny", "escalate_siu"):
+        final_payout_breakdown = {k: 0.0 for k in payout_breakdown}
+        result.proposed_payout_amount = 0.0
+    else:
+        # If the LLM explicitly zeroed out or omitted a line due to fraud/discrepancies, respect the reduction
+        llm_breakdown = result.payout_breakdown or {}
+        for k in list(final_payout_breakdown.keys()):
+            matched_val = None
+            for lk, lv in llm_breakdown.items():
+                if lk.lower() in k.lower() or k.lower() in lk.lower():
+                    matched_val = lv
+                    break
+            if matched_val is not None and matched_val == 0:
+                final_payout_breakdown[k] = 0.0
+        result.proposed_payout_amount = round(sum(final_payout_breakdown.values()), 2)
+    result.payout_breakdown = final_payout_breakdown
     result.repair_cost_vs_limit_check = limit_check
     for d in math_discrepancies:
         if d not in result.discrepancy_details:

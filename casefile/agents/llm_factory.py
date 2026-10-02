@@ -552,15 +552,21 @@ class LLMFactory:
             if not api_key:
                 raise ValueError("GEMINI_API_KEY or GOOGLE_API_KEY environment variable is required when LLM_PROVIDER='gemini'.")
             from langchain_google_genai import ChatGoogleGenerativeAI
-            clean_model = model_name.strip() if model_name else "gemini-2.5-flash"
+            from langchain_google_genai.chat_models import GoogleAPIError, GoogleRateLimitError
+            clean_model = model_name.strip() if model_name else "gemini-3.8-flash"
             llm = ChatGoogleGenerativeAI(
                 model=clean_model,
                 temperature=0.0,
                 google_api_key=api_key,
-                max_retries=1,
+                max_retries=3,
                 timeout=60.0,
             )
-            return llm.with_structured_output(output_schema)
+            structured_llm = llm.with_structured_output(output_schema)
+            return structured_llm.with_retry(
+                retry_if_exception_type=(GoogleAPIError, GoogleRateLimitError, Exception),
+                stop_after_attempt=5,
+                wait_exponential_jitter=True,
+            )
 
         elif provider == "openai":
             api_key = os.getenv("OPENAI_API_KEY")

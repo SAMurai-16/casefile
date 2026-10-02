@@ -15,7 +15,9 @@ def get_checkpointer(backend: Literal["memory", "sqlite"] = "memory"):
             from ..config import CHECKPOINT_DIR
             db_path = CHECKPOINT_DIR / "checkpoints.sqlite"
             conn = sqlite3.connect(str(db_path), check_same_thread=False)
-            return SqliteSaver(conn)
+            saver = SqliteSaver(conn)
+            saver.setup()
+            return saver
         except (ImportError, Exception):
             # Fallback to MemorySaver if sqlite saver has dependency issues
             return MemorySaver()

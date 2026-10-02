@@ -87,8 +87,8 @@ def supervisor_node(state: ClaimState) -> dict:
             "handoff_history": state["handoff_history"] + [handoff]
         }
 
-    # Phase C: Fast Short-Circuit for Cancelled / Lapsed Policy
-    if state["investigation"].policy_status in ["Lapsed", "Cancelled"]:
+    # Phase C: Fast Short-Circuit for Cancelled / Lapsed / Inactive Policy
+    if state["investigation"].policy_status in ["Lapsed", "Cancelled", "Suspended"] or state["investigation"].coverage_verdict == "not_covered":
         handoff = HandoffPayload(
             source_node="supervisor",
             target_node="terminate",

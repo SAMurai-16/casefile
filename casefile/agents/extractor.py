@@ -37,6 +37,7 @@ Extract and normalize all required information into the target schema.
 
 Extraction Instructions:
 - Extract incident date, time, location, and factual description from the narrative.
+- Extract insured_name (the named insured or filing contact on the FNOL) and driver_name (the person driving during the collision).
 - Extract all vehicle identification information.
 - Parse driver-reported damage areas, injury descriptions, and police report numbers from the narrative text.
 - Extract every distinct repair operation and part into itemized_repairs (description, category, part_type, amount, labor_hours).
@@ -57,6 +58,16 @@ Extraction Instructions:
         "total_tokens": 1850
     })
     
+    # Deterministic fallback: ensure insured_name is populated from structured intake header if missing
+    fnol_raw = state.get("fnol_raw", {})
+    if not result.insured_name:
+        fnol_contact = (
+            fnol_raw.get("intake_header", {}).get("insured_contact", {}) or
+            fnol_raw.get("insured_contact") or {}
+        )
+        if isinstance(fnol_contact, dict):
+            result.insured_name = fnol_contact.get("full_name") or fnol_contact.get("name")
+
     # Build summary mentioning any optional docs extracted
     extras = []
     if result.rental_receipt:

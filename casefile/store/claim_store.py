@@ -11,11 +11,46 @@ class ClaimStore:
     def list_available_claims(self) -> List[str]:
         """Finds all distinct claim IDs present in the data directory."""
         claims = set()
+        prefix = "claim_"
+        suffix = "_fnol.json"
         for f in self.data_dir.glob("claim_*_fnol.json"):
-            parts = f.name.split("_")
-            if len(parts) >= 2:
-                claims.add(parts[1])
+            if f.name.startswith(prefix) and f.name.endswith(suffix):
+                claims.add(f.name[len(prefix):-len(suffix)])
         return sorted(list(claims))
+
+    def save_claim_package(
+        self,
+        claim_num: str,
+        fnol_raw: Dict[str, Any],
+        estimate_raw: Dict[str, Any],
+        policy_raw: Dict[str, Any],
+        rental_raw: Optional[Dict[str, Any]] = None,
+        medical_raw: Optional[Dict[str, Any]] = None,
+        third_party_raw: Optional[Dict[str, Any]] = None,
+    ) -> str:
+        self.data_dir.mkdir(parents=True, exist_ok=True)
+        fnol_path = self.data_dir / f"claim_{claim_num}_fnol.json"
+        est_path = self.data_dir / f"claim_{claim_num}_repair_estimate.json"
+        pol_path = self.data_dir / f"claim_{claim_num}_policy.json"
+
+        with open(fnol_path, "w", encoding="utf-8") as f:
+            json.dump(fnol_raw, f, indent=2)
+        with open(est_path, "w", encoding="utf-8") as f:
+            json.dump(estimate_raw, f, indent=2)
+        with open(pol_path, "w", encoding="utf-8") as f:
+            json.dump(policy_raw, f, indent=2)
+
+        if rental_raw:
+            with open(self.data_dir / f"claim_{claim_num}_rental_receipt.json", "w", encoding="utf-8") as f:
+                json.dump(rental_raw, f, indent=2)
+        if medical_raw:
+            with open(self.data_dir / f"claim_{claim_num}_medical_bill.json", "w", encoding="utf-8") as f:
+                json.dump(medical_raw, f, indent=2)
+        if third_party_raw:
+            with open(self.data_dir / f"claim_{claim_num}_third_party.json", "w", encoding="utf-8") as f:
+                json.dump(third_party_raw, f, indent=2)
+
+        return claim_num
 
     def load_claim_package(
         self, claim_num: str
